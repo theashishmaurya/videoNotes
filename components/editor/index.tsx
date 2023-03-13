@@ -11,12 +11,18 @@ import { data } from "./data";
 import { convertToBlock } from "./utils";
 import dynamic from "next/dynamic";
 
-// Import EditorJS  as a dynamic component
+type EditorProps = {
+  markdown: string;
+};
 
-const Editor = () => {
+const Editor = (props: EditorProps) => {
   const [state, setState] = useState("");
   const editorRef = useRef<EditorJS>();
-  // Wrap below code in useCallBack hook
+  const { markdown } = props;
+
+  useEffect(() => {
+    editorRef.current?.blocks.render(convertToBlock(markdown));
+  }, [markdown]);
 
   useEffect(() => {
     const init = async () => {
@@ -71,10 +77,6 @@ const Editor = () => {
 
         onChange: () => {
           console.log("Something changed");
-        },
-
-        data: {
-          blocks: convertToBlock(data),
         },
 
         placeholder: "Let's write an awesome story!",

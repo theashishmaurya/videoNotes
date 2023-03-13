@@ -1,9 +1,11 @@
+import { OutputBlockData, OutputData } from "@editorjs/editorjs";
+
 export const convertToBlock = (markdown: string) => {
-  const blocks: any = [];
+  const blocks: OutputBlockData[] = [];
 
   const lines = markdown.split(/\r?\n/);
 
-  let currentBlock: { type: any; data?: any } | null = null;
+  let currentBlock: OutputBlockData;
 
   lines.forEach((line) => {
     if (line.startsWith("#")) {
@@ -70,6 +72,7 @@ export const convertToBlock = (markdown: string) => {
       // Handle horizontal line
       currentBlock = {
         type: "delimiter",
+        data: {},
       };
       blocks.push(currentBlock);
     } else if (line.trim() !== "") {
@@ -82,9 +85,18 @@ export const convertToBlock = (markdown: string) => {
       };
       blocks.push(currentBlock);
     } else {
-      currentBlock = null;
+      currentBlock = {
+        type: "paragraph",
+        data: {
+          text: "",
+        },
+      };
     }
   });
 
-  return blocks;
+  let outputData: OutputData = {
+    time: Date.now(),
+    blocks: blocks,
+  };
+  return outputData;
 };

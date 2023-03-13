@@ -14,44 +14,55 @@
 
 export const transcribeAudio = async (audioBlob: BlobPart): Promise<any> => {
   // Transcribe the audio using the OpenAI API
-  const formData = new FormData();
-  formData.append("model", "whisper-1");
-  formData.append("file", new File([audioBlob], "audio.mp3"));
-  if (formData.get("file") === null) {
-    throw new Error("File is null");
-  }
-  // Check if the file is too big more than 25MB
-  if (formData.get("file") instanceof File) {
-    const file = formData.get("file") as File;
-    if (file.size > 25 * 1024 * 1024) {
-      throw new Error("File is too big");
-    }
-  }
-
   try {
-    const response = await fetch(
-      "https://api.openai.com/v1/audio/transcriptions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer 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`,
-        },
-        body: formData,
+    const formData = new FormData();
+    formData.append("model", "whisper-1");
+    formData.append("file", new File([audioBlob], "audio.mp3"));
+    if (formData.get("file") === null) {
+      throw new Error("File is null");
+    }
+    // Check if the file is too big more than 25MB
+    if (formData.get("file") instanceof File) {
+      const file = formData.get("file") as File;
+      if (file.size > 25 * 1024 * 1024) {
+        throw new Error("File is too big");
       }
-    );
-    const json = await response.json();
-    console.log(json);
-    return json.text;
+    }
+
+    try {
+      const response = await fetch(
+        "https://api.openai.com/v1/audio/transcriptions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer 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`,
+          },
+          body: formData,
+        }
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error);
+      }
+      const json = await response.json();
+      return json.text;
+    } catch (error) {
+      throw new Error("Failed to transcribe audio");
+    }
   } catch (error) {
     console.log(error);
-    throw new Error("Transcription failed");
+    error = error instanceof Error ? error.message : error;
+    throw new Error((error as string) || "Failed to transcribe audio");
   }
 };
 
-export const transcribeAudioFromUrl = async (url: string): Promise<any> => {
-  const response = await fetch(`/api/getYTVideo?url=${url}}`);
-  console.log(response);
-  const blob = await response.blob();
-  const text = await transcribeAudio(blob);
-  return text;
+export const getAudioFromUrl = async (url: string): Promise<any> => {
+  try {
+    const response = await fetch("api/getaudio?url=" + url);
+    const blob = await response.blob();
+    return blob;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to get audio from url");
+  }
 };
