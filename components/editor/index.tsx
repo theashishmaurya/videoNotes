@@ -1,4 +1,4 @@
-import EditorJS from "@editorjs/editorjs";
+import EditorJS, { OutputData } from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import Code from "@editorjs/code";
@@ -6,27 +6,32 @@ import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
 import Quote from "@editorjs/quote";
 import Image from "@editorjs/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { data } from "./data";
-import { convertToBlock } from "./utils";
+import React, {
+  forwardRef,
+  MutableRefObject,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import dynamic from "next/dynamic";
 
-type EditorProps = {
-  markdown: string;
+interface EditorProps {
+  data?: OutputData;
+  onChange(val: OutputData): void;
+  editorRef: MutableRefObject<EditorJS | undefined>;
+}
+// eslint-disable-next-line react/display-name
+export type EditorForwardRef = {
+  editor: EditorJS;
 };
 
-const Editor = (props: EditorProps) => {
-  const editorRef = useRef<EditorJS>();
-  const { markdown } = props;
-
-  useEffect(() => {
-    editorRef.current?.blocks?.render(convertToBlock(markdown));
-  }, [markdown]);
+const Editor = forwardRef((props: EditorProps, ref) => {
+  const { editorRef } = props;
 
   useEffect(() => {
     if (!editorRef.current) {
       let editor = new EditorJS({
-        holderId: "editorjs",
+        holder: "editorjs",
         //   holder: "editorjs",
 
         tools: {
@@ -44,9 +49,12 @@ const Editor = (props: EditorProps) => {
           console.log("Editor.js is ready to work!");
         },
 
-        onChange: () => {
-          console.log("Something changed");
+        onChange: async (api, event) => {
+          console.log("something changed");
+          const data = await api.saver.save();
+          props.onChange(data);
         },
+        data: props.data,
 
         placeholder: "Let's write an awesome story!",
       });
@@ -57,31 +65,20 @@ const Editor = (props: EditorProps) => {
     return () => {
       if (editorRef.current && editorRef.current.destroy) {
         editorRef.current.destroy();
+        editorRef.current = undefined;
       }
     };
   }, []);
 
   return (
     <div>
-      {/* <button
-        onClick={() => {
-          editorRef.current
-            ?.save()
-            .then((outputData) => {
-              console.log("Article data: ", outputData);
-              setState(JSON.stringify(outputData));
-              console.log("State: ", state);
-            })
-            .catch((error) => {
-              console.log("Saving failed: ", error);
-            });
-        }}
-      >
-        Save
-      </button> */}
       <div id="editorjs"></div>
     </div>
   );
-};
+});
+
+Editor.displayName = "Editor";
 
 export default Editor;
+
+// export default dynamic(() => Promise.resolve(Editor), { ssr: false });

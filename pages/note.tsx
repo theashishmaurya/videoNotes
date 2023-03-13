@@ -1,28 +1,45 @@
+import { EditorForwardRef } from "@/components/editor";
+import { data } from "@/components/editor/data";
+import { convertToBlock } from "@/components/editor/utils";
 import VideoPlayer from "@/components/VideoPlayer/videoPlayer";
 import { getGptResponse } from "@/utils/openAiApi/chatGpt";
 import {
   getAudioFromUrl,
   transcribeAudio,
 } from "@/utils/openAiApi/transcription";
+import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { Button, Col, Input, message, Row, Space } from "antd";
 import dynamic from "next/dynamic";
-import { ChangeEvent, useState } from "react";
+import React from "react";
+import { ChangeEvent, useRef, useState } from "react";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
 const Note = () => {
-  const [transcribedData, setTranscribedData] = useState("");
-  const [markDownData, setMarkDownData] = useState("Write something...");
+  const [transcribedData, setTranscribedData] = useState<string>();
+  const [markDownData, setMarkDownData] = useState<string>();
   const [audioBlob, setAudioBlob] = useState<Blob>();
   const [url, setUrl] = useState("https://www.youtube.com/embed/uTWCPw3Tu-k");
+  const [editorData, setEditorData] = useState<OutputData>();
+  const EditorRef = useRef<EditorJS>();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAudioBlob(undefined);
-    setTranscribedData("");
-    setMarkDownData("write something...");
+    setTranscribedData(undefined);
+    setMarkDownData(undefined);
     setUrl(e.target.value);
+  };
+
+  const AddBlocks = (data: OutputData) => {
+    // Append the data to the editor
+    let dummy: OutputData = {
+      ...data,
+      blocks: [...(editorData?.blocks || []), ...data.blocks],
+    };
+    console.log(dummy);
+    EditorRef.current?.render(dummy);
   };
 
   const handleConvert = async () => {
@@ -41,10 +58,17 @@ const Note = () => {
         setTranscribedData(transcript);
       }
 
-      let markdown = markDownData; // Check if markDownData is already set
-      if (!markdown) {
+      let markdown = markDownData;
+      if (!markdown && transcript) {
         markdown = await getGptResponse(transcript);
         setMarkDownData(markdown);
+        if (markdown) {
+          console.log("Adding markdown block");
+          AddBlocks(convertToBlock(markdown));
+        }
+      } else if (markdown) {
+        console.log("Adding else block");
+        AddBlocks(convertToBlock(markdown));
       }
     } catch (error) {
       message.error(
@@ -53,6 +77,11 @@ const Note = () => {
       console.log(error);
     }
   };
+
+  const dummyCall = () => {
+    console.log(EditorRef.current);
+  };
+
   return (
     <>
       <Row gutter={60}>
@@ -74,13 +103,6 @@ const Note = () => {
               value={url}
               onChange={(e) => handleChange(e)}
             />
-            <Input
-              size="large"
-              placeholder="Your Youtube Video URL"
-              style={{ width: 400 }}
-              value={markDownData}
-              onChange={(e) => setMarkDownData(e.target.value)}
-            />
             <Button type="primary" onClick={handleConvert}>
               Convert
             </Button>
@@ -91,7 +113,11 @@ const Note = () => {
           <VideoPlayer url={url} />
         </Col>
         <Col span={12}>
-          <Editor markdown={markDownData} />
+          <Editor
+            data={editorData}
+            onChange={setEditorData}
+            editorRef={EditorRef}
+          />
         </Col>
       </Row>
     </>

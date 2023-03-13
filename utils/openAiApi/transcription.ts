@@ -35,7 +35,7 @@ export const transcribeAudio = async (audioBlob: BlobPart): Promise<any> => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer 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`,
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPEN_AI_API_KEY}`,
           },
           body: formData,
         }
