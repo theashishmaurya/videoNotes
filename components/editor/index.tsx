@@ -16,16 +16,15 @@ type EditorProps = {
 };
 
 const Editor = (props: EditorProps) => {
-  const [state, setState] = useState("");
   const editorRef = useRef<EditorJS>();
   const { markdown } = props;
 
   useEffect(() => {
-    editorRef.current?.blocks.render(convertToBlock(markdown));
+    editorRef.current?.blocks?.render(convertToBlock(markdown));
   }, [markdown]);
 
   useEffect(() => {
-    const init = async () => {
+    if (!editorRef.current) {
       let editor = new EditorJS({
         holderId: "editorjs",
         //   holder: "editorjs",
@@ -38,36 +37,6 @@ const Editor = (props: EditorProps) => {
           inlineCode: InlineCode,
           marker: Marker,
           quote: Quote,
-
-          //   highlight: {
-          //     shortcut: "CMD+SHIFT+H",
-
-          //     config: {
-          //       // default color for marker
-          //       markerDefaultColor: "yellow",
-          //       // default color for background
-          //       markerDefaultBackgroundColor: "green",
-          //       // array of possible colors for marker
-          //       markerColors: ["yellow", "orange", "red", "green", "blue"],
-          //       // array of possible colors for background
-          //       markerBackgroundColors: [
-          //         "yellow",
-          //         "orange",
-          //         "red",
-          //         "green",
-          //         "blue",
-          //       ],
-          //       // additional classname for Tool's button
-          //       className: "some-class",
-
-          //       // messages
-          //       messages: {
-          //         UI: {
-          //           button: "Highlight",
-          //         },
-          //       },
-          //     },
-          //   },
         },
         inlineToolbar: ["link", "marker", "bold", "italic"],
 
@@ -82,15 +51,13 @@ const Editor = (props: EditorProps) => {
         placeholder: "Let's write an awesome story!",
       });
 
-      await editor.isReady;
-
       editorRef.current = editor;
-    };
-
-    init();
+    }
 
     return () => {
-      editorRef.current?.destroy();
+      if (editorRef.current && editorRef.current.destroy) {
+        editorRef.current.destroy();
+      }
     };
   }, []);
 
