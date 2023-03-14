@@ -78,10 +78,6 @@ const Note = () => {
     }
   };
 
-  const dummyCall = () => {
-    console.log(EditorRef.current);
-  };
-
   return (
     <>
       <Row gutter={60}>

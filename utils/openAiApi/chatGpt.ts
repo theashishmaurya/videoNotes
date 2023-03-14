@@ -5,7 +5,9 @@
 //  "model": "gpt-3.5-turbo",
 //  "messages": [{"role": "user", "content": "What is the OpenAI mission?"}]
 //  }'
-export const getGptResponse = async (text: string): Promise<any> => {
+export const getGptResponse = async (
+  text: string
+): Promise<string | undefined> => {
   if (!text) return;
 
   return new Promise((resolve, reject) => {
