@@ -6,36 +6,28 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { useRouter } from "next/router";
 
 const { Header, Content, Sider } = Layout;
 
+// Incase I need to use the menu component
 const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
   key,
   label: `nav ${key}`,
 }));
 
 const items2: MenuProps["items"] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-].map((icon, index) => {
-  const key = String(index + 1);
-
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      };
-    }),
-  };
-});
-
+  {
+    key: "note",
+    label: "Note",
+    icon: <UserOutlined />,
+  },
+  {
+    key: "notebook",
+    label: "Notebook",
+    icon: <LaptopOutlined />,
+  },
+];
 type AuthenticatedlayoutProps = {
   children: ReactNode;
 };
@@ -47,16 +39,21 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
     token: { colorBgContainer },
   } = theme.useToken();
 
+  // use Location hook to get the current path and set the selected key accordingly
+  const router = useRouter();
+
+  const { pathname } = router;
+
   return (
     <Layout>
       <Header className="header">
         <div className="logo" />
-        <Menu
+        {/* <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["2"]}
           items={items1}
-        />
+        /> */}
       </Header>
       <Layout>
         <Sider
@@ -66,16 +63,15 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
           <Menu
             mode="inline"
             defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
             style={{ height: "100%", borderRight: 0 }}
+            onClick={({ key }) => router.push(key.toString())}
             items={items2}
           />
         </Sider>
         <Layout style={{ padding: "0 24px 24px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
             <Breadcrumb.Item>App</Breadcrumb.Item>
+            <Breadcrumb.Item>{pathname.replace("/", "")}</Breadcrumb.Item>
           </Breadcrumb>
           <Content
             style={{

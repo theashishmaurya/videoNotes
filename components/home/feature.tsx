@@ -22,7 +22,7 @@ const features = [
     img: "https://img.icons8.com/3d-fluency/750/null/opened-folder.png",
   },
   {
-    title: "Pay as you go",
+    title: "Completely Free Forever",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
     img: "https://img.icons8.com/3d-fluency/750/null/money.png",

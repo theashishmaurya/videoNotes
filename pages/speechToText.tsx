@@ -15,6 +15,8 @@ export default function Home() {
   const [transcription, setTranscription] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder>();
+  const [currentFrequency, setCurrentFrequency] = useState(0);
+  const [breakFrequency, setBreakFrequency] = useState(0);
 
   const handleStartRecording = async () => {
     setIsRecording(true);
@@ -25,31 +27,72 @@ export default function Home() {
     const chunks: BlobPart[] = [];
     const mediaRecorder = new MediaRecorder(await stream);
     mediaRecorderRef.current = mediaRecorder;
-    mediaRecorder.addEventListener("dataavailable", (e) => chunks.push(e.data));
-    mediaRecorder.addEventListener("stop", async () => {
-      (await stream).getTracks().forEach((track) => track.stop());
-      const audioBlob = new Blob(chunks, { type: "audio/webm" });
-      const audioBuffer = await audioContext.decodeAudioData(
-        await audioBlob.arrayBuffer()
-      );
-      if (!ffmpeg.isLoaded()) await ffmpeg.load();
 
-      // Convert audio buffer to mp3 using FFmpeg.js
-      ffmpeg.FS("writeFile", "audio.wav", await fetchFile(audioBlob));
-      await ffmpeg.run(
-        "-i",
-        "audio.wav",
-        "-codec:a",
-        "libmp3lame",
-        "-qscale:a",
-        "2",
-        "audio.mp3"
-      );
-      const mp3Blob = ffmpeg.FS("readFile", "audio.mp3");
+    // Create analyzer node to get audio data
+    const analyzer = audioContext.createAnalyser();
+    analyzer.fftSize = 2048;
+    const bufferLength = analyzer.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    const sampleRate = audioContext.sampleRate;
 
-      setTranscription(await transcribeAudio(mp3Blob));
+    // Connect the audio stream to the analyzer node
+    const source = audioContext.createMediaStreamSource(await stream);
+    source.connect(analyzer);
+
+    // Analyze the audio data and send it to the OpenAI API
+    let interval = setInterval(
+      async (chunk) => {
+        analyzer.getByteFrequencyData(dataArray);
+        const avg = dataArray.reduce((acc, val) => acc + val) / bufferLength;
+        const decibels = 20 * Math.log10(avg);
+        if (decibels < 20) {
+          // send the wave data to the API
+          const audioBlob = new Blob(chunks, { type: "audio/webm" });
+          // check if the audio is long enough to send to the API
+          console.log("Sending audio to API...", chunk.length);
+          // let response = await transcribeAudio(audioBlob);
+          // let newTranscription = transcription + response;
+          // setTranscription(newTranscription);
+
+          // delete the audio data
+          // chunks.splice(0, chunks.length);
+        }
+      },
+      2000,
+      chunks
+    );
+
+    mediaRecorder.addEventListener("dataavailable", (e) => {
+      console.log("Recording...", chunks);
+      chunks.push(e.data);
     });
-    mediaRecorder.start();
+
+    mediaRecorder.addEventListener("stop", async () => {
+      clearInterval(interval);
+      // (await stream).getTracks().forEach((track) => track.stop());
+      // const audioBlob = new Blob(chunks, { type: "audio/webm" });
+      // const audioBuffer = await audioContext.decodeAudioData(
+      //   await audioBlob.arrayBuffer()
+      // );
+      // console.log("Sending audio to API...", chunks.length);
+      // if (!ffmpeg.isLoaded()) await ffmpeg.load();
+
+      // // Convert audio buffer to mp3 using FFmpeg.js
+      // ffmpeg.FS("writeFile", "audio.wav", await fetchFile(audioBlob));
+      // await ffmpeg.run(
+      //   "-i",
+      //   "audio.wav",
+      //   "-codec:a",
+      //   "libmp3lame",
+      //   "-qscale:a",
+      //   "2",
+      //   "audio.mp3"
+      // );
+      // const mp3Blob = ffmpeg.FS("readFile", "audio.mp3");
+
+      // setTranscription(await transcribeAudio(mp3Blob));
+    });
+    mediaRecorder.start(500);
   };
 
   const handleStopRecording = () => {
@@ -67,7 +110,7 @@ export default function Home() {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer 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`,
+          Authorization: `Bearer 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`,
         },
         body: formData,
       }
@@ -91,6 +134,8 @@ export default function Home() {
           ) : (
             <button onClick={handleStartRecording}>Start Recording</button>
           )}
+          <div>Current Frequency : {currentFrequency}</div>
+          <div>Break Frequency : {breakFrequency}</div>
           <div>{transcription}</div>
         </div>
       </main>

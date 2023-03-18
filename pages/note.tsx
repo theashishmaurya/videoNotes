@@ -24,6 +24,7 @@ const Note = () => {
   const [url, setUrl] = useState("https://www.youtube.com/embed/uTWCPw3Tu-k");
   const [editorData, setEditorData] = useState<OutputData>();
   const EditorRef = useRef<EditorJS>();
+  const [loader, setLoader] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAudioBlob(undefined);
@@ -109,11 +110,25 @@ const Note = () => {
           <VideoPlayer url={url} />
         </Col>
         <Col span={12}>
-          <Editor
-            data={editorData}
-            onChange={setEditorData}
-            editorRef={EditorRef}
-          />
+          <Button
+            type="primary"
+            style={{}}
+            onClick={() =>
+              EditorRef.current?.save().then(() => {
+                // TODO: Make API call to save the data
+                console.log(editorData);
+              })
+            }
+          >
+            Save
+          </Button>
+          <div>
+            <Editor
+              data={editorData}
+              onChange={setEditorData}
+              editorRef={EditorRef}
+            />
+          </div>
         </Col>
       </Row>
     </>

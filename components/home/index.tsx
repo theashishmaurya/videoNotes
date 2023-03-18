@@ -9,7 +9,7 @@ export default function Home() {
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
         <HeroArea />
         <Features />
-        <PaymentPlan />
+        {/* <PaymentPlan /> */}
       </Space>
     </div>
   );
