@@ -11,6 +11,8 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ children }) => {
   const { token } = theme.useToken();
   const ref = React.useRef<HTMLDivElement>(null);
 
+  const childrens = React.Children.toArray(children);
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -22,6 +24,8 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ children }) => {
     position: "relative",
     height: "100%",
     overflow: "hidden",
+    display: "flex",
+    flexDirection: "row",
   };
 
   return (
@@ -37,8 +41,21 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ children }) => {
         open={open}
         getContainer={false}
       >
-        {children}
+        {childrens[0]}
       </Drawer>
+      <div
+        style={{
+          height: "100%",
+          overflow: "auto",
+          margin: "10px",
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {childrens.slice(1)}
+      </div>
     </div>
   );
 };
