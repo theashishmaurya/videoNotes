@@ -54,7 +54,7 @@ const Editor = forwardRef((props: EditorProps, ref) => {
           const data = await api.saver.save();
           props.onChange(data);
         },
-        data: props.data || undefined,
+        data: props.data,
 
         placeholder: "Let's write an awesome story!",
       });
