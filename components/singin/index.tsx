@@ -7,7 +7,7 @@ import {
   signInWithPopup,
   UserCredential,
 } from "firebase/auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 interface SingInWithGoogleButtonProps {
   title?: string;
@@ -34,13 +34,19 @@ export default function SingInWithGoogleButton(
 
         try {
           const docRef = doc(db, "users", user.uid);
-          await setDoc(docRef, {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            emailVerified: user.emailVerified,
-          });
+          // check if user exists in the database
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+          } else {
+            await setDoc(docRef, {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              emailVerified: user.emailVerified,
+            });
+          }
         } catch (error) {
           throw error; // Throw error to catch block
         }

@@ -20,6 +20,7 @@
     "@editorjs/quote": "^2.5.0",
     "@ffmpeg/core": "^0.11.0",
     "@ffmpeg/ffmpeg": "^0.11.6",
+    "@reduxjs/toolkit": "^1.9.3",
     "@types/node": "18.15.0",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
@@ -30,11 +31,13 @@
     "fs": "^0.0.1-security",
     "lamejs": "github:zhuker/lamejs",
     "less-loader": "^11.1.0",
+    "nanoid": "^4.0.1",
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-redux": "^8.0.5",
     "typescript": "4.9.5",
-    "ytdl-core": "^4.11.2"
+    "ytdl-core": "^4.11.3"
   },
   "devDependencies": {
     "@editorjs/simple-image": "^1.5.1"

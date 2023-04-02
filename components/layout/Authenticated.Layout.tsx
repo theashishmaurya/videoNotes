@@ -18,8 +18,8 @@ const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
 
 const items2: MenuProps["items"] = [
   {
-    key: "note",
-    label: "Note",
+    key: "createnote",
+    label: "Create Note",
     icon: <UserOutlined />,
   },
   {
@@ -64,7 +64,7 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
             mode="inline"
             defaultSelectedKeys={["1"]}
             style={{ height: "100%", borderRight: 0 }}
-            onClick={({ key }) => router.push(key.toString())}
+            onClick={({ key }) => router.push(`/${key}`)}
             items={items2}
           />
         </Sider>

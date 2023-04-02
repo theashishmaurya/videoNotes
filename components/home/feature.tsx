@@ -48,7 +48,7 @@ const Feature = ({ title, description, img, index }: any) => {
       >
         <Image src={img} width={400} height={400} alt={""} />
       </Col>
-      <Col span={10}>
+      <Col span={10} style={{ color: "#000000" }}>
         <h1>{title}</h1>
         <p>{description}</p>
       </Col>

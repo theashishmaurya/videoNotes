@@ -34,12 +34,13 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ children }) => {
         {/* Open */}
       </Button>
       <Drawer
-        title="Basic Drawer"
+        title="File Explorer"
         placement="left"
         onClose={onClose}
         closable={false}
         open={open}
         getContainer={false}
+        width={250}
       >
         {childrens[0]}
       </Drawer>

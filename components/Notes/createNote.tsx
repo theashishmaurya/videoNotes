@@ -1,7 +1,12 @@
 import { EditorForwardRef } from "@/components/editor";
 import { data } from "@/components/editor/data";
 import { convertToBlock } from "@/components/editor/utils";
+import Directory from "@/components/notebook/directory";
+import SideDrawer from "@/components/notebook/sideDrawer";
 import VideoPlayer from "@/components/VideoPlayer/videoPlayer";
+import { useUser } from "@/context/userContext";
+import { saveNotes } from "@/firebase/db/notes";
+import { db } from "@/firebase/firebaseClient";
 import { getGptResponse } from "@/utils/openAiApi/chatGpt";
 import {
   getAudioFromUrl,
@@ -9,7 +14,9 @@ import {
 } from "@/utils/openAiApi/transcription";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { Button, Col, Input, message, Row, Space } from "antd";
+import { doc, DocumentReference, setDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import React from "react";
 import { ChangeEvent, useRef, useState } from "react";
 
@@ -17,7 +24,7 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const Note = () => {
+const CreateNote = () => {
   const [transcribedData, setTranscribedData] = useState<string>();
   const [markDownData, setMarkDownData] = useState<string>();
   const [audioBlob, setAudioBlob] = useState<Blob>();
@@ -25,6 +32,9 @@ const Note = () => {
   const [editorData, setEditorData] = useState<OutputData>();
   const EditorRef = useRef<EditorJS>();
   const [loader, setLoader] = useState<boolean>(false);
+  const { user } = useUser();
+
+  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAudioBlob(undefined);
@@ -39,7 +49,6 @@ const Note = () => {
       ...data,
       blocks: [...(editorData?.blocks || []), ...data.blocks],
     };
-    console.log(dummy);
     EditorRef.current?.render(dummy);
   };
 
@@ -50,6 +59,7 @@ const Note = () => {
       let audio = audioBlob; // Check if audioBlob is already set
       if (!audio) {
         audio = await getAudioFromUrl(url);
+        console.log(audio);
         setAudioBlob(audio);
       }
 
@@ -79,8 +89,37 @@ const Note = () => {
     }
   };
 
+  const handleSaveToNotes = async () => {
+    // get the pid from the url
+    // create a new firebase document with the pid in notes collection
+    // save the data to the document
+
+    const pid = router.query.pid;
+    if (!pid) return;
+
+    try {
+      // TODO: Fix below issue
+      if (!user) throw new Error("User is not logged in");
+      if (editorData === undefined) throw new Error("Editor data is empty");
+      if (transcribedData === undefined)
+        throw new Error("Transcribed data is empty");
+      saveNotes({
+        id: pid as string,
+        url: url,
+        content: editorData,
+        transcribedData: transcribedData,
+        date: new Date(),
+        userId: user.uid,
+      });
+    } catch (error) {
+      message.error(
+        error && error instanceof Error ? error.message : "Something went wrong"
+      );
+    }
+  };
+
   return (
-    <>
+    <div>
       <Row gutter={60}>
         <Col span={24}>
           <Space
@@ -116,6 +155,7 @@ const Note = () => {
             onClick={() =>
               EditorRef.current?.save().then(() => {
                 // TODO: Make API call to save the data
+                handleSaveToNotes();
                 console.log(editorData);
               })
             }
@@ -131,8 +171,8 @@ const Note = () => {
           </div>
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 
-export default Note;
+export default CreateNote;

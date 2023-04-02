@@ -4,6 +4,10 @@ import "antd/dist/reset.css";
 import Authenticatedlayout from "@/components/layout/Authenticated.Layout";
 import { useRouter } from "next/router";
 import UnAuthenticatedLayout from "@/components/layout/UnAuthenticated.Layout";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
+import { useEffect } from "react";
+import { UserContext, UserProvider } from "@/context/userContext";
 
 const UnAuthenticatedRoutes = [
   "/login",
@@ -26,8 +30,12 @@ export default function App({ Component, pageProps }: AppProps) {
     );
   }
   return (
-    <Authenticatedlayout>
-      <Component {...pageProps} />
-    </Authenticatedlayout>
+    <Provider store={store}>
+      <UserProvider>
+        <Authenticatedlayout>
+          <Component {...pageProps} />
+        </Authenticatedlayout>
+      </UserProvider>
+    </Provider>
   );
 }

@@ -1,15 +1,10 @@
 
 .hero-area{
-    background-size: cover;
+    margin: 10%;
     height: 90vh;
-    position: relative;
 }
 
 .hero-title {
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     color: #000;
     text-align: center;
     font-size: 3rem;
@@ -18,10 +13,6 @@
 }
 
 .hero-description {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     color: #474444;
     text-align: center;
     font-size: 1.3rem;
@@ -30,9 +21,7 @@
 }
 
 .hero-buttons{
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
     z-index: 1;
 }

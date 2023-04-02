@@ -1,56 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Space, Tree } from "antd";
 import type { DataNode, DirectoryTreeProps } from "antd/es/tree";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteFilled,
+  FileAddFilled,
+  FolderAddFilled,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { Key } from "antd/es/table/interface";
 import { recursivelyAddNode, recursivelyDeleteNode } from "./utils";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/firebase/firebaseClient";
+import { getDirectory, updateDirectory } from "@/firebase/db/notes";
+import { useUser } from "@/context/userContext";
+import { nanoid } from "nanoid";
+import { useRouter } from "next/router";
 
 const { DirectoryTree } = Tree;
 
-export interface CustomDataNode extends DataNode {
-  // Support data which is string
-  data?: string;
-  children?: CustomDataNode[];
-}
+const treeData: DataNode[] = [];
 
-const treeData: CustomDataNode[] = [
-  {
-    title: "parent 0",
-    key: "0-0",
-    children: [
-      {
-        title: "leaf 0-0",
-        key: "0-0-0",
-        isLeaf: true,
-        icon: <PlusOutlined />,
-        data: "hello",
-      },
-      { title: "leaf 0-1", key: "0-0-1", isLeaf: true },
-    ],
-  },
-  {
-    title: "parent 1",
-    key: "0-1",
-    children: [
-      { title: "leaf 1-0", key: "0-1-0", isLeaf: true },
-      { title: "leaf 1-1", key: "0-1-1", isLeaf: true },
-    ],
-  },
-  {
-    title: "file 2",
-    key: "0-2",
-    isLeaf: true,
-  },
-];
-
-const Directory: React.FC = () => {
-  const [directoryData = treeData as CustomDataNode[], setDirectoryData] =
-    useState<CustomDataNode[]>();
+const Directory: React.FC = ({}) => {
+  const [directoryData, setDirectoryData] = useState<DataNode[]>([]);
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
+  const [selectedNodes, setSelectedNodes] = useState<[]>([]);
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      console.log(user, "Getting Directory");
+      getDirectory(user.uid).then((data) => {
+        console.log(directoryData);
+        setDirectoryData(data);
+      });
+    }
+  }, [user]);
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
     console.log("Trigger Select", keys, info);
-    setSelectedKeys(keys);
+    setSelectedKeys(info.selectedNodes.map((node) => node.key));
+    //if selected node is leaf then navigate to the note
+    if (info.selectedNodes[0].isLeaf) {
+      const basePath = router.asPath.split("/")[1]; // extract base dynamically
+
+      router.push(
+        `/${info.selectedNodes[0].key}`,
+        `/${basePath}/${info.selectedNodes[0].key}`,
+        {
+          shallow: true,
+        }
+      );
+    }
   };
 
   const onDelete = () => {
@@ -64,27 +65,35 @@ const Directory: React.FC = () => {
     console.log("Trigger Expand", keys, info);
   };
 
-  const addNewNode = (type: "folder" | "file") => {
+  const addNewNode = async (type: "folder" | "file") => {
     //TODO: Add a unique key
     //TODO: Add a way to edit the title
-    //TODO: Add a way to add a folder inside a folder
     const newFolder = {
       title: "New Folder",
-      key: Math.random().toString(),
+      key: nanoid(6),
       children: [],
     };
 
     const newFile = {
       title: "New File",
-      key: Math.random().toString(),
+      key: nanoid(6),
       isLeaf: true,
     };
 
     if (selectedKeys.length === 0) {
-      setDirectoryData([
-        ...directoryData,
-        type === "folder" ? newFolder : newFile,
-      ]);
+      try {
+        if (!user) throw new Error("User not found");
+        let newDirectoryData = [
+          ...directoryData,
+          type === "folder" ? newFolder : newFile,
+        ];
+
+        await updateDirectory(user.uid, newDirectoryData);
+        setDirectoryData([...directoryData]);
+      } catch (error) {
+        console.log(error);
+      }
+
       return;
     }
 
@@ -93,6 +102,19 @@ const Directory: React.FC = () => {
       directoryData,
       type === "folder" ? newFolder : newFile
     );
+
+    //TODO: Extract the below code, and make it a function
+    // save the new data to the firebase database inside the user collection
+    // user.id = uid
+
+    try {
+      if (!user) throw new Error("User not found");
+
+      await updateDirectory(user.uid, NewDirectoryData);
+    } catch (error) {
+      console.log(error);
+    }
+
     setDirectoryData(NewDirectoryData);
   };
 
@@ -105,18 +127,20 @@ const Directory: React.FC = () => {
         }}
       >
         <Button
-          type="primary"
-          icon={<PlusOutlined />}
+          type="ghost"
+          icon={<FolderAddFilled />}
           onClick={() => addNewNode("folder")}
-        >
-          Add Folder
-        </Button>
-        <Button type="primary" onClick={() => addNewNode("file")}>
-          Add File
-        </Button>
-        <Button type="primary" onClick={onDelete}>
-          Delete
-        </Button>
+        />
+        <Button
+          type="ghost"
+          onClick={() => addNewNode("file")}
+          icon={<FileAddFilled />}
+        />
+        <Button
+          type="ghost"
+          onClick={onDelete}
+          icon={<DeleteFilled color="red" />}
+        />
       </Space>
       <DirectoryTree
         multiple
@@ -125,7 +149,7 @@ const Directory: React.FC = () => {
         onExpand={onExpand}
         treeData={directoryData}
         onRightClick={(e) => {
-          console.log(e);
+          console.log(e.node);
         }}
       />
     </>

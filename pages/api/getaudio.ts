@@ -1,5 +1,3 @@
-// Download the Youtube video and send it to client
-
 import { NextApiRequest, NextApiResponse } from "next";
 import ytdl from "ytdl-core";
 
@@ -12,14 +10,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).send("URL is not a string");
     return;
   }
+  try {
+    const video = ytdl(url, {
+      filter: "audioonly",
+      quality: "highestaudio",
+    });
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Content-Disposition", "attachment; filename=audio.mp3");
 
-  const video = ytdl(url, {
-    filter: "audioonly",
-    quality: "highestaudio",
-  });
-
-  res.setHeader("Content-Type", "audio/mpeg");
-  res.setHeader("Content-Disposition", "attachment; filename=audio.mp3");
-
-  video.pipe(res);
+    video.pipe(res);
+  } catch (error) {
+    res.status(400).send("Failed to get audio from url");
+  }
 };

@@ -1,11 +1,10 @@
 import { DataNode } from "antd/es/tree";
-import { CustomDataNode } from "./directory";
 
 //TODO: delete multiple nodes
 export const recursivelyDeleteNode = (
   key: (string | number)[],
-  data: CustomDataNode[]
-): CustomDataNode[] => {
+  data: DataNode[]
+): DataNode[] => {
   let nodeDeleted = false;
   const newData = data.map((node) => {
     if (key.includes(node.key)) {
@@ -32,7 +31,7 @@ export const recursivelyDeleteNode = (
       (node) =>
         node !== null &&
         (node.children !== undefined || node.title !== undefined)
-    ) as CustomDataNode[];
+    ) as DataNode[];
   }
 
   return data;
@@ -41,8 +40,8 @@ export const recursivelyDeleteNode = (
 export const recursivelyEditTitle = (
   key: string | number,
   title: string,
-  data: CustomDataNode[]
-): CustomDataNode[] => {
+  data: DataNode[]
+): DataNode[] => {
   let nodeEdited = false;
   const newData = data.map((node) => {
     if (key === node.key) {
@@ -63,16 +62,28 @@ export const recursivelyEditTitle = (
       (node) =>
         node !== null &&
         (node.children !== undefined || node.title !== undefined)
-    ) as CustomDataNode[];
+    ) as DataNode[];
   }
   return data;
 };
-
+//TODO: Performance optimization
+/*
+1. Use a map to store the node's parent (May be)
+2. Node and parent node does not have a reference to each other.
+3. Every time a node is added,edited,deleted, the whole directory have to be traversed and rewritten to db.
+4. The whole directory is stored in redux store.
+ */
+/**
+ * @param key
+ * @param data
+ * @param newnode
+ * @returns
+ */
 export const recursivelyAddNode = (
   key: string | number,
-  data: CustomDataNode[],
-  newnode: CustomDataNode
-): CustomDataNode[] => {
+  data: DataNode[],
+  newnode: DataNode
+): DataNode[] => {
   let nodeAdded = false;
   const newData = data.map((node) => {
     if (key === node.key) {
@@ -96,7 +107,7 @@ export const recursivelyAddNode = (
       (node) =>
         node !== null &&
         (node.children !== undefined || node.title !== undefined)
-    ) as CustomDataNode[];
+    ) as DataNode[];
   }
   return data;
 };
