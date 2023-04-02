@@ -38,15 +38,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      console.log(user, "Getting Directory");
-      getDirectory(user.uid).then((data) => {
-        console.log(directoryData);
-        setDirectoryData(data);
-      });
-    }
-  }, [user]);
   const value = {
     user,
     directoryData,

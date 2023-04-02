@@ -45,11 +45,12 @@ const CreateNote = () => {
 
   const AddBlocks = (data: OutputData) => {
     // Append the data to the editor
-    let dummy: OutputData = {
+    let newBlockData: OutputData = {
       ...data,
       blocks: [...(editorData?.blocks || []), ...data.blocks],
     };
-    EditorRef.current?.render(dummy);
+    EditorRef.current?.render(newBlockData);
+    setEditorData(newBlockData);
   };
 
   const handleConvert = async () => {
@@ -105,6 +106,7 @@ const CreateNote = () => {
         throw new Error("Transcribed data is empty");
       saveNotes({
         id: pid as string,
+        title: editorData.blocks[0].data.text,
         url: url,
         content: editorData,
         transcribedData: transcribedData,
@@ -139,7 +141,14 @@ const CreateNote = () => {
               value={url}
               onChange={(e) => handleChange(e)}
             />
-            <Button type="primary" onClick={handleConvert}>
+            <Button
+              type="primary"
+              onClick={() => {
+                handleConvert();
+
+                AddBlocks(convertToBlock(data));
+              }}
+            >
               Convert
             </Button>
           </Space>
@@ -153,8 +162,10 @@ const CreateNote = () => {
             type="primary"
             style={{}}
             onClick={() =>
-              EditorRef.current?.save().then(() => {
+              EditorRef.current?.save().then((data) => {
                 // TODO: Make API call to save the data
+                console.log("Save button clicked");
+
                 handleSaveToNotes();
                 console.log(editorData);
               })

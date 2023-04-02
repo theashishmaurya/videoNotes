@@ -10,7 +10,6 @@ const Notes = () => {
 
   return (
     <div>
-      <p>{pid}</p>
       <CreateNote />
     </div>
   );
