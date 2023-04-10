@@ -146,7 +146,7 @@ const CreateNote = () => {
               onClick={() => {
                 handleConvert();
 
-                AddBlocks(convertToBlock(data));
+                // AddBlocks(convertToBlock(data));
               }}
             >
               Convert
