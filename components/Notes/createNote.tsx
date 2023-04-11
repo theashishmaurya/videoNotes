@@ -1,24 +1,20 @@
-import { EditorForwardRef } from "@/components/editor";
-import { data } from "@/components/editor/data";
 import { convertToBlock } from "@/components/editor/utils";
-import Directory from "@/components/notebook/directory";
-import SideDrawer from "@/components/notebook/sideDrawer";
 import VideoPlayer from "@/components/VideoPlayer/videoPlayer";
 import { useUser } from "@/context/userContext";
 import { saveNotes } from "@/firebase/db/notes";
-import { db } from "@/firebase/firebaseClient";
 import { getGptResponse } from "@/utils/openAiApi/chatGpt";
 import {
   getAudioFromUrl,
   transcribeAudio,
 } from "@/utils/openAiApi/transcription";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
-import { Button, Col, Input, message, Row, Space } from "antd";
-import { doc, DocumentReference, setDoc } from "firebase/firestore";
+import { Button, Col, Input, message, Row, Space, Steps } from "antd";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { ChangeEvent, useRef, useState } from "react";
+import { checkIfValidUrl, convertYoutubeLink } from "./utils";
+import { nanoid } from "nanoid";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
@@ -31,10 +27,9 @@ const CreateNote = () => {
   const [url, setUrl] = useState("https://www.youtube.com/embed/uTWCPw3Tu-k");
   const [editorData, setEditorData] = useState<OutputData>();
   const EditorRef = useRef<EditorJS>();
-  const [loader, setLoader] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { user } = useUser();
-
-  const router = useRouter();
+  const [currentStep, setCurrentStep] = useState<number>(0);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAudioBlob(undefined);
@@ -54,24 +49,26 @@ const CreateNote = () => {
   };
 
   const handleConvert = async () => {
+    setLoading(true);
     if (!url) return alert("Please enter a valid url");
 
     try {
       let audio = audioBlob; // Check if audioBlob is already set
       if (!audio) {
         audio = await getAudioFromUrl(url);
-        console.log(audio);
         setAudioBlob(audio);
       }
 
       let transcript = transcribedData; // Check if transcribedData is already set
       if (!transcript && audio) {
+        setCurrentStep(1);
         transcript = await transcribeAudio(audio);
         setTranscribedData(transcript);
       }
 
       let markdown = markDownData;
       if (!markdown && transcript) {
+        setCurrentStep(2);
         markdown = await getGptResponse(transcript);
         setMarkDownData(markdown);
         if (markdown) {
@@ -79,24 +76,24 @@ const CreateNote = () => {
           AddBlocks(convertToBlock(markdown));
         }
       } else if (markdown) {
-        console.log("Adding else block");
         AddBlocks(convertToBlock(markdown));
       }
     } catch (error) {
+      setCurrentStep(0);
+      setLoading(false);
       message.error(
         error && error instanceof Error ? error.message : "Something went wrong"
       );
       console.log(error);
     }
+    setLoading(false);
+    setCurrentStep(0);
   };
 
   const handleSaveToNotes = async () => {
     // get the pid from the url
     // create a new firebase document with the pid in notes collection
     // save the data to the document
-
-    const pid = router.query.pid;
-    if (!pid) return;
 
     try {
       // TODO: Fix below issue
@@ -105,14 +102,20 @@ const CreateNote = () => {
       if (transcribedData === undefined)
         throw new Error("Transcribed data is empty");
       saveNotes({
-        id: pid as string,
+        id: nanoid(),
         title: editorData.blocks[0].data.text,
         url: url,
         content: editorData,
         transcribedData: transcribedData,
         date: new Date(),
         userId: user.uid,
-      });
+      })
+        .then(() => {
+          message.success("Note saved successfully");
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
     } catch (error) {
       message.error(
         error && error instanceof Error ? error.message : "Something went wrong"
@@ -130,32 +133,57 @@ const CreateNote = () => {
               width: "100%",
               padding: "10px",
               margin: "10px 10px 40px 10px",
-              alignItems: "center",
+              alignItems: loading ? " " : "center",
             }}
           >
-            <Input
-              addonBefore="https://"
-              size="large"
-              placeholder="Your Youtube Video URL"
-              style={{ width: 400 }}
-              value={url}
-              onChange={(e) => handleChange(e)}
-            />
-            <Button
-              type="primary"
-              onClick={() => {
-                handleConvert();
+            {loading ? (
+              <Steps
+                size="small"
+                style={{ width: "100%" }}
+                current={currentStep}
+                items={[
+                  {
+                    title: "Getting Video",
+                  },
+                  {
+                    title: "Transcribing",
+                  },
+                  {
+                    title: "Generating Your Notes",
+                  },
+                ]}
+              />
+            ) : (
+              <>
+                <Input
+                  addonBefore="https://"
+                  size="large"
+                  placeholder="Your Youtube Video URL"
+                  style={{ width: 400 }}
+                  value={url}
+                  onChange={(e) => handleChange(e)}
+                  status={checkIfValidUrl(url) ? "" : "error"}
+                />
 
-                // AddBlocks(convertToBlock(data));
-              }}
-            >
-              Convert
-            </Button>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    handleConvert();
+
+                    // AddBlocks(convertToBlock(data));
+                  }}
+                >
+                  Convert
+                </Button>
+              </>
+            )}
           </Space>
         </Col>
 
         <Col span={12}>
-          <VideoPlayer url={url} />
+          <VideoPlayer
+            url={checkIfValidUrl(url) ? convertYoutubeLink(url) : ""}
+          />
         </Col>
         <Col span={12}>
           <Button

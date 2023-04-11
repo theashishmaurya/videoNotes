@@ -5,7 +5,6 @@ import Authenticatedlayout from "@/components/layout/Authenticated.Layout";
 import { useRouter } from "next/router";
 import UnAuthenticatedLayout from "@/components/layout/UnAuthenticated.Layout";
 import { Provider } from "react-redux";
-import { store } from "@/redux/store";
 import { useEffect } from "react";
 import { UserContext, UserProvider } from "@/context/userContext";
 
@@ -30,12 +29,10 @@ export default function App({ Component, pageProps }: AppProps) {
     );
   }
   return (
-    <Provider store={store}>
-      <UserProvider>
-        <Authenticatedlayout>
-          <Component {...pageProps} />
-        </Authenticatedlayout>
-      </UserProvider>
-    </Provider>
+    <UserProvider>
+      <Authenticatedlayout>
+        <Component {...pageProps} />
+      </Authenticatedlayout>
+    </UserProvider>
   );
 }

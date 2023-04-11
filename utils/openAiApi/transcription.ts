@@ -63,6 +63,7 @@ export const getAudioFromUrl = async (url: string): Promise<any> => {
       const error = await response.json();
       throw new Error(error.error);
     }
+    console.log(response);
     const blob = await response.blob();
     return blob;
   } catch (error) {
