@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
-import Image from "next/image";
+import { Layout, Menu, theme } from "antd";
 import SingInWithGoogle from "../singin";
 
 const { Header, Content, Footer } = Layout;
@@ -27,6 +26,7 @@ const UnAuthenticatedLayout: React.FC<UnAuthenticatedlayoutProps> = ({
         }}
       >
         <div className="logo">
+          {/*  eslint-disable-next-line @next/next/no-img-element */}
           <img src="https://img.logoipsum.com/245.svg" alt="logo" />
         </div>
         <Menu

@@ -68,6 +68,7 @@ const Editor = forwardRef((props: EditorProps, ref) => {
         editorRef.current = undefined;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
