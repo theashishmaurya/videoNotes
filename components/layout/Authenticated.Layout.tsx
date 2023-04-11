@@ -1,10 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Input, MenuProps, Modal } from "antd";
+import { LaptopOutlined, UserOutlined } from "@ant-design/icons";
+import { Input, InputRef, MenuProps, Modal } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { useRouter } from "next/router";
 
@@ -40,7 +36,7 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
   } = theme.useToken();
 
   const [open, setOpen] = useState(false);
-  const APIRef = useRef(null);
+  const [ApiKey, setApiKey] = useState("");
 
   useEffect(() => {
     //Check local Storage
@@ -56,12 +52,21 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
 
   const { pathname } = router;
 
-  const handleOk = () => {};
+  const handleOk = () => {
+    localStorage.setItem("OpenAPIKey", ApiKey);
+    setApiKey("");
+    setOpen(false);
+  };
 
   return (
     <Layout>
       <Modal title="Your OpenAI API key here" open={open} onOk={handleOk}>
-        <Input placeholder="Your API Key Here" />
+        <Input
+          placeholder="Your API Key Here"
+          onChange={(e) => {
+            setApiKey(e.target.value);
+          }}
+        />
       </Modal>
       <Header className="header">
         <div className="logo" />

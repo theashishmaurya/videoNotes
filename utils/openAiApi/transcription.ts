@@ -12,6 +12,8 @@
  * @see https://openai.com/blog/openai-wisper/ - OpenAI Whisper
  */
 
+import { getApiKey } from "./getApiKey";
+
 export const transcribeAudio = async (audioBlob: BlobPart): Promise<any> => {
   // Transcribe the audio using the OpenAI API
   try {
@@ -35,7 +37,7 @@ export const transcribeAudio = async (audioBlob: BlobPart): Promise<any> => {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPEN_AI_API_KEY}`,
+            Authorization: `Bearer ${getApiKey()}`,
           },
           body: formData,
         }
