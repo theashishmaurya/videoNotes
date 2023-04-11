@@ -21,5 +21,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     video.pipe(res);
   } catch (error) {
     res.status(400).send("Failed to get audio from url");
+  } finally {
+    res.end();
   }
 };
