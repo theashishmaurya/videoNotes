@@ -30,9 +30,7 @@ const Directory: React.FC = ({}) => {
 
   useEffect(() => {
     if (user) {
-      console.log(user, "Getting Directory");
       getDirectory(user.uid).then((data) => {
-        console.log(directoryData);
         setDirectoryData(data);
       });
     }

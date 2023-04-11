@@ -1,9 +1,10 @@
 import { OutputData } from "@editorjs/editorjs";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import EditorJS from "@editorjs/editorjs";
+import dynamic from "next/dynamic";
+import { useNoteBookData } from "@/context/noteBookContext";
 import { data } from "../editor/data";
 import { convertToBlock } from "../editor/utils";
-import dynamic from "next/dynamic";
 
 // Dynamic import of EditorJS
 const Editor = dynamic(() => import("@/components/editor"), {
@@ -12,15 +13,28 @@ const Editor = dynamic(() => import("@/components/editor"), {
 
 const NoteView = () => {
   const EditorRef = useRef<EditorJS>();
+  const { currentNoteData } = useNoteBookData();
+  const [editorData, setEditorData] = useState<OutputData>();
+
+  useEffect(() => {
+    if (!currentNoteData) return;
+    console.log(EditorRef.current);
+    setEditorData(currentNoteData.content);
+  }, [currentNoteData]);
+
+  useEffect(() => {
+    if (!editorData) return;
+    console.log(editorData);
+    EditorRef.current?.render(editorData);
+  }, [editorData]);
 
   return (
     <div>
       {/* <div>TaBs</div> */}
       <Editor
-        data={convertToBlock(data)}
-        onChange={function (val: OutputData): void {
-          throw new Error("Function not implemented.");
-        }}
+        // ref={EditorRef}
+        data={editorData}
+        onChange={setEditorData}
         editorRef={EditorRef}
       />
     </div>

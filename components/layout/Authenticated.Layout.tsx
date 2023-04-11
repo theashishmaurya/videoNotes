@@ -1,10 +1,6 @@
-import React, { ReactNode } from "react";
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import type { MenuProps } from "antd";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { LaptopOutlined, UserOutlined } from "@ant-design/icons";
+import { Input, InputRef, MenuProps, Modal } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { useRouter } from "next/router";
 
@@ -39,13 +35,39 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const [open, setOpen] = useState(false);
+  const [ApiKey, setApiKey] = useState("");
+
+  useEffect(() => {
+    //Check local Storage
+
+    let key = localStorage.getItem("OpenAPIKey");
+    if (key === null) {
+      setOpen(true);
+    }
+  }, []);
+
   // use Location hook to get the current path and set the selected key accordingly
   const router = useRouter();
 
   const { pathname } = router;
 
+  const handleOk = () => {
+    localStorage.setItem("OpenAPIKey", ApiKey);
+    setApiKey("");
+    setOpen(false);
+  };
+
   return (
     <Layout>
+      <Modal title="Your OpenAI API key here" open={open} onOk={handleOk}>
+        <Input
+          placeholder="Your API Key Here"
+          onChange={(e) => {
+            setApiKey(e.target.value);
+          }}
+        />
+      </Modal>
       <Header className="header">
         <div className="logo" />
         {/* <Menu

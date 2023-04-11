@@ -7,7 +7,8 @@ import {
   signInWithPopup,
   UserCredential,
 } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 interface SingInWithGoogleButtonProps {
   title?: string;
@@ -19,6 +20,8 @@ export default function SingInWithGoogleButton(
   props: SingInWithGoogleButtonProps
 ) {
   const { title, icon } = props;
+  const router = useRouter();
+
   const handleGoogleSignIn = () => {
     async function signInWithGoogle(): Promise<UserCredential> {
       const provider = new GoogleAuthProvider();
@@ -30,14 +33,15 @@ export default function SingInWithGoogleButton(
         message.success("Signed in with Google");
         const user = result.user;
 
-        // Authenticated user information is stored in the user database in the firestore database.
+        /**
+         *Authenticated user information is stored in the user database in the firestore database.
+         */
 
         try {
           const docRef = doc(db, "users", user.uid);
           // check if user exists in the database
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
           } else {
             await setDoc(docRef, {
               uid: user.uid,
@@ -47,6 +51,9 @@ export default function SingInWithGoogleButton(
               emailVerified: user.emailVerified,
             });
           }
+
+          // redirect to the home page
+          router.push("/createnote");
         } catch (error) {
           throw error; // Throw error to catch block
         }

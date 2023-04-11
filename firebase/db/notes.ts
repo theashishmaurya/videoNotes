@@ -1,10 +1,20 @@
 import { OutputData } from "@editorjs/editorjs";
 import { DataNode } from "antd/es/tree";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebaseClient";
 
-interface NotesData {
+export interface NotesData {
   id: string;
+  title?: string;
   url: string;
   content: OutputData;
   userId: string;
@@ -13,12 +23,29 @@ interface NotesData {
 }
 
 export const saveNotes = async (notesData: NotesData) => {
-  return await setDoc(doc(db, "notes"), notesData);
+  return await setDoc(doc(db, "notes", notesData.id), notesData);
 };
 
 export const getNotes = async (userId: string) => {
-  const notesRef = doc(db, "notes", userId);
-  const docSnap = await getDoc(notesRef);
+  //get all the notes where uid = userId
+  //return the notes
+
+  console.log("getNotes", userId);
+
+  const q = query(collection(db, "notes"), where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
+
+  const notes: NotesData[] = [];
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data() as NotesData;
+    notes.push(data);
+  });
+
+  console.log("notes", notes);
+
+  return notes;
 };
 
 export const updateDirectory = async (

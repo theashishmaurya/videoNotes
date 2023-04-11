@@ -5,6 +5,9 @@
 //  "model": "gpt-3.5-turbo",
 //  "messages": [{"role": "user", "content": "What is the OpenAI mission?"}]
 //  }'
+
+import { getApiKey } from "./getApiKey";
+
 export const getGptResponse = async (
   text: string
 ): Promise<string | undefined> => {
@@ -15,7 +18,7 @@ export const getGptResponse = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPEN_AI_API_KEY}`,
+        Authorization: `Bearer ${getApiKey()}`,
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",

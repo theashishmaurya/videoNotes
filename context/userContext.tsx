@@ -12,7 +12,6 @@ import { auth } from "@/firebase/firebaseClient";
 import { User } from "firebase/auth";
 import { DataNode } from "antd/es/tree";
 import { getDirectory } from "@/firebase/db/notes";
-import { setDirectory } from "@/redux/userSlice";
 
 interface UserContext {
   user: User | null;
@@ -38,15 +37,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      console.log(user, "Getting Directory");
-      getDirectory(user.uid).then((data) => {
-        console.log(directoryData);
-        setDirectoryData(data);
-      });
-    }
-  }, [user]);
   const value = {
     user,
     directoryData,

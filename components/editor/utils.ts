@@ -10,8 +10,6 @@ export const convertToBlock = (markdown: string) => {
 
   lines.forEach((line) => {
     if (line.startsWith("#")) {
-      console.log(line);
-      console.log(line.match(/^#+/)![0].length);
       // Handle header
       currentBlock = {
         type: "header",
