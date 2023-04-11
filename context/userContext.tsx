@@ -12,7 +12,6 @@ import { auth } from "@/firebase/firebaseClient";
 import { User } from "firebase/auth";
 import { DataNode } from "antd/es/tree";
 import { getDirectory } from "@/firebase/db/notes";
-import { setDirectory } from "@/redux/userSlice";
 
 interface UserContext {
   user: User | null;
