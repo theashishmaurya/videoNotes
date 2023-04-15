@@ -60,7 +60,9 @@ export const transcribeAudio = async (audioBlob: BlobPart): Promise<any> => {
 
 export const getAudioFromUrl = async (url: string): Promise<any> => {
   try {
-    const response = await fetch("/api/getaudio?url=" + url);
+    const response = await fetch(
+      "https://videonotes-backend-0puq.onrender.com/ytld/mp3?url=" + url
+    );
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.error);
