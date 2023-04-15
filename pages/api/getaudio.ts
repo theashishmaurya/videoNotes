@@ -14,14 +14,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const video = ytdl(url, {
       filter: "audioonly",
       quality: "highestaudio",
+      dlChunkSize: 1024 * 1024,
+      highWaterMark: 1024 * 1024,
     });
     res.setHeader("Content-Type", "audio/mpeg");
     res.setHeader("Content-Disposition", "attachment; filename=audio.mp3");
 
-    video.pipe(res);
+    video
+      .pipe(res, { end: true })
+      .on("error", (err) => {
+        console.error(err);
+        res.statusCode = 500;
+        res.end("Failed to stream audio");
+      })
+      .on("finish", () => {
+        res.end();
+      });
   } catch (error) {
     res.status(400).send("Failed to get audio from url");
-  } finally {
-    res.end();
   }
 };
