@@ -7,6 +7,7 @@ import UnAuthenticatedLayout from "@/components/layout/UnAuthenticated.Layout";
 import { Provider } from "react-redux";
 import { useEffect } from "react";
 import { UserContext, UserProvider } from "@/context/userContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const UnAuthenticatedRoutes = [
   "/login",
@@ -20,6 +21,7 @@ const UnAuthenticatedRoutes = [
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  const queryClient = new QueryClient();
 
   if (UnAuthenticatedRoutes.includes(router.pathname)) {
     return (
@@ -29,10 +31,12 @@ export default function App({ Component, pageProps }: AppProps) {
     );
   }
   return (
-    <UserProvider>
-      <Authenticatedlayout>
-        <Component {...pageProps} />
-      </Authenticatedlayout>
-    </UserProvider>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <Authenticatedlayout>
+          <Component {...pageProps} />
+        </Authenticatedlayout>
+      </UserProvider>
+    </QueryClientProvider>
   );
 }

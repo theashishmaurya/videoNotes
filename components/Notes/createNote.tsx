@@ -15,6 +15,9 @@ import React from "react";
 import { ChangeEvent, useRef, useState } from "react";
 import { checkIfValidUrl, convertYoutubeLink } from "./utils";
 import { nanoid } from "nanoid";
+import { useQuery } from "@tanstack/react-query";
+import { query } from "firebase/firestore";
+import { getSubs } from "@/api/youtube/getSubs";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
@@ -30,6 +33,7 @@ const CreateNote = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState<number>(0);
+  //Use tanstack/react-query to cache the data
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAudioBlob(undefined);
@@ -52,40 +56,50 @@ const CreateNote = () => {
     setLoading(true);
     if (!url) return alert("Please enter a valid url");
 
-    try {
-      let audio = audioBlob; // Check if audioBlob is already set
-      if (!audio) {
-        audio = await getAudioFromUrl(url);
-        setAudioBlob(audio);
-      }
+    const data = (await getSubs(url)) as { simpleText: string };
 
-      let transcript = transcribedData; // Check if transcribedData is already set
-      if (!transcript && audio) {
-        setCurrentStep(1);
-        transcript = await transcribeAudio(audio);
-        setTranscribedData(transcript);
-      }
+    console.log(data);
 
-      let markdown = markDownData;
-      if (!markdown && transcript) {
-        setCurrentStep(2);
-        markdown = await getGptResponse(transcript);
-        setMarkDownData(markdown);
-        if (markdown) {
-          console.log("Adding markdown block");
-          AddBlocks(convertToBlock(markdown));
-        }
-      } else if (markdown) {
-        AddBlocks(convertToBlock(markdown));
-      }
-    } catch (error) {
-      setCurrentStep(0);
-      setLoading(false);
-      message.error(
-        error && error instanceof Error ? error.message : "Something went wrong"
-      );
-      console.log(error);
-    }
+    // try {
+    //   let audio = audioBlob; // Check if audioBlob is already set
+    //   if (!audio) {
+    //     audio = await getAudioFromUrl(url);
+    //     setAudioBlob(audio);
+    //   }
+
+    //   let transcript = transcribedData; // Check if transcribedData is already set
+    //   if (!transcript && audio) {
+    //     setCurrentStep(1);
+    //     transcript = await transcribeAudio(audio);
+    //     setTranscribedData(transcript);
+    //   }
+
+    //   let markdown = markDownData;
+    //   if (!markdown && transcript) {
+    //     setCurrentStep(2);
+    //     markdown = await getGptResponse(transcript);
+    //     setMarkDownData(markdown);
+    //     if (markdown) {
+    //       console.log("Adding markdown block");
+    //       AddBlocks(convertToBlock(markdown));
+    //     }
+    //   } else if (markdown) {
+    //     AddBlocks(convertToBlock(markdown));
+    //   }
+    // } catch (error) {
+    //   setCurrentStep(0);
+    //   setLoading(false);
+    //   message.error(
+    //     error && error instanceof Error ? error.message : "Something went wrong"
+    //   );
+    //   console.log(error);
+    // }
+
+    /**
+     * 1. Get the Subs from the youtube video
+     * 2. Convert the subs to markdown
+     * 3. Add the markdown to the editor
+     */
     setLoading(false);
     setCurrentStep(0);
   };

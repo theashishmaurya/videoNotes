@@ -13,19 +13,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       info.player_response.captions.playerCaptionsTracklistRenderer
         .captionTracks;
     if (tracks && tracks.length) {
-      console.log(
-        "Found captions for",
-        tracks
-          .map((t: { name: { simpleText: any } }) => t.name.simpleText)
-          .join(", ")
-      );
       const track = tracks.find(
         (t: { languageCode: string }) => t.languageCode === lang
       );
       if (track) {
-        console.log("Retrieving captions:", track.name.simpleText);
-        console.log("URL", track.baseUrl);
-
         fetch(`${track.baseUrl}&fmt=${format !== "xml" ? format : ""}`)
           .then((response) => response.text())
           .then((xmlData) => {
@@ -41,22 +32,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               const plainText = result.transcript.text;
               const response = {
                 transcript: plainText,
-                simpleTax: convertToSimpletText(plainText),
+                simpleText: convertToSimpletText(plainText),
               };
 
               res.send(response);
             });
           })
           .catch((error) => {
-            console.error("Error fetching captions:", error);
             res.status(500).send("Error fetching captions");
           });
       } else {
-        console.log("Could not find captions for", lang);
         res.status(400).send("Could not find captions for " + lang);
       }
     } else {
-      console.log("No captions found for this video");
       res.status(400).send("No captions found for this video");
     }
   });
@@ -68,8 +56,6 @@ function convertToSimpletText(transcriptData: any) {
     const cleanedLine = line.replace(/\[[^\]]+\]/g, "").trim();
     text += cleanedLine + " ";
   }
-
-  console.log("Simple text:", text.trim());
   return text.trim();
 }
 
