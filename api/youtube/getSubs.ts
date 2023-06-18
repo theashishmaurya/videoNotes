@@ -1,5 +1,10 @@
+type GetSubsResponse = {
+  simpleText: string;
+  transcript: any[];
+};
+
 export const getSubs = (url: string) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<Error | GetSubsResponse>((resolve, reject) => {
     fetch(`/api/getsubs?url=${url}`)
       .then((response) => {
         if (!response.ok) {

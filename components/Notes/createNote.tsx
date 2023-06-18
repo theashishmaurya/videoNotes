@@ -56,9 +56,21 @@ const CreateNote = () => {
     setLoading(true);
     if (!url) return alert("Please enter a valid url");
 
-    const data = (await getSubs(url)) as { simpleText: string };
+    try {
+      const data = (await getSubs(url)) as { simpleText: string };
 
-    console.log(data);
+      setTranscribedData(data.simpleText);
+
+      if (!data) return alert("No data found");
+      const markdown = await getGptResponse(data.simpleText);
+      setMarkDownData(markdown);
+      if (markdown) {
+        console.log("Adding markdown block");
+        AddBlocks(convertToBlock(markdown));
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     // try {
     //   let audio = audioBlob; // Check if audioBlob is already set
