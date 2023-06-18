@@ -32,6 +32,7 @@ const features = [
 const Feature = ({ title, description, img, index }: any) => {
   return (
     <Row
+      id="features"
       style={{
         flexDirection: index % 2 === 0 ? "row" : "row-reverse",
         alignItems: "center",

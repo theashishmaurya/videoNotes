@@ -3,6 +3,7 @@ import { LaptopOutlined, UserOutlined } from "@ant-design/icons";
 import { Input, InputRef, MenuProps, Modal } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const { Header, Content, Sider } = Layout;
 
@@ -67,6 +68,9 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
             setApiKey(e.target.value);
           }}
         />
+        <Link href="https://platform.openai.com/docs/developer-quickstart/your-api-keys">
+          Here is how to get your API key?
+        </Link>
       </Modal>
       <Header className="header">
         <div className="logo" />
