@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { Layout, Menu, theme } from "antd";
 import SingInWithGoogle from "../singin";
+import Link from "next/link";
 
 const { Header, Content, Footer } = Layout;
 
@@ -32,11 +33,16 @@ const UnAuthenticatedLayout: React.FC<UnAuthenticatedlayoutProps> = ({
         <Menu
           theme="light"
           mode="horizontal"
-          //   defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["1"]}
           items={[
-            { key: "1", label: "Home" },
-            { key: "2", label: "About" },
-            { key: "3", label: "Contact" }, // Label can be a ReactNode as well <Link to="/about">About</Link>
+            { key: "1", label: <Link href="/">Home</Link> },
+            { key: "2", label: <Link href="#features">Features</Link> },
+            {
+              key: "3",
+              label: (
+                <Link href="https://twitter.com/theysaymaurya">Contact Us</Link>
+              ),
+            }, // Label can be a ReactNode as well <Link to="/about">About</Link>
           ]}
         />
         <SingInWithGoogle title={"Get Started"} icon={false} />

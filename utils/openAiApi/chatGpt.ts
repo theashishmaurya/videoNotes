@@ -9,7 +9,8 @@
 import { getApiKey } from "./getApiKey";
 
 export const getGptResponse = async (
-  text: string
+  text: string,
+  contentType: string
 ): Promise<string | undefined> => {
   if (!text) return;
 
@@ -25,13 +26,12 @@ export const getGptResponse = async (
         messages: [
           {
             role: "system",
-            content:
-              "Your job is to convert the Following text into meaning full and insighfull notes in form of Markdown with Headings and Images, quotes etc.",
+            content: contentType,
           },
           {
             role: "assistant",
             content:
-              "Supported Markdown: #, ##, ###, ####, #####, ######, ![](url), >, *, 1. ",
+              "Supported Markdown: #, ##, ###, ####, #####, ######, ![](url), >, *, 1. , ```code```,",
           },
           {
             role: "user",
