@@ -43,8 +43,6 @@ export const getNotes = async (userId: string) => {
     notes.push(data);
   });
 
-  console.log("notes", notes);
-
   return notes;
 };
 
