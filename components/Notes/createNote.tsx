@@ -8,7 +8,17 @@ import {
   transcribeAudio,
 } from "@/utils/openAiApi/transcription";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
-import { Button, Col, Input, message, Row, Space, Steps } from "antd";
+import {
+  Button,
+  Col,
+  Dropdown,
+  Input,
+  MenuProps,
+  message,
+  Row,
+  Space,
+  Steps,
+} from "antd";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
@@ -18,11 +28,20 @@ import { nanoid } from "nanoid";
 import { useQuery } from "@tanstack/react-query";
 import { query } from "firebase/firestore";
 import { getSubs } from "@/api/youtube/getSubs";
+import { promtLibrary } from "./helper";
+import { DownOutlined } from "@ant-design/icons";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
+type PromptType = keyof typeof promtLibrary;
+
+// keys for the dropdown menu
+const items: MenuProps["items"] = Object.keys(promtLibrary).map((key) => ({
+  key,
+  label: key,
+}));
 const CreateNote = () => {
   const [transcribedData, setTranscribedData] = useState<string>();
   const [markDownData, setMarkDownData] = useState<string>();
@@ -33,6 +52,7 @@ const CreateNote = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user } = useUser();
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [selectedPromt, setSelectedPromt] = useState<PromptType>("Note"); // default prompt
   //Use tanstack/react-query to cache the data
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,9 +80,14 @@ const CreateNote = () => {
       const data = (await getSubs(url)) as { simpleText: string };
 
       setTranscribedData(data.simpleText);
+      setCurrentStep(1);
 
       if (!data) return alert("No data found");
-      const markdown = await getGptResponse(data.simpleText);
+      const markdown = await getGptResponse(
+        data.simpleText,
+        promtLibrary[selectedPromt].prompt
+      );
+      setCurrentStep(2);
       setMarkDownData(markdown);
       if (markdown) {
         console.log("Adding markdown block");
@@ -190,17 +215,35 @@ const CreateNote = () => {
                   onChange={(e) => handleChange(e)}
                   status={checkIfValidUrl(url) ? "" : "error"}
                 />
+                <Dropdown.Button
+                  icon={
+                    <>
+                      <DownOutlined />
+                    </>
+                  }
+                  loading={loading}
+                  menu={{
+                    items,
+                    onClick: (e) => {
+                      setSelectedPromt(e.key as PromptType);
+                    },
+                  }}
+                  onOpenChange={(val) => {
+                    console.log(val);
+                  }}
+                  onClick={() => handleConvert()}
+                >
+                  Convert to {selectedPromt}
+                </Dropdown.Button>
 
-                <Button
+                {/* <Button
                   type="primary"
                   onClick={() => {
-                    handleConvert();
-
                     // AddBlocks(convertToBlock(data));
                   }}
                 >
                   Convert
-                </Button>
+                </Button> */}
               </>
             )}
           </Space>
