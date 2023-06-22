@@ -35,16 +35,13 @@ export const getServerSideProps = async (context: any) => {
     console.log(userID, "User ID");
 
     if (userID) {
-      console.log(userID);
-
       const { email, phone } = await passage.user.get(userID);
 
       const identifier = email ? email : phone;
-      console.log(identifier);
 
       return { props: { isAuthorized: true, username: identifier } };
     } else {
-      console.log("Not Authorized");
+      return { props: { isAuthorized: false, username: "" } };
     }
   } catch (error) {
     return { props: { isAuthorized: false, username: "" } };
