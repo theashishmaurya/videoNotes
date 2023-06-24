@@ -1,31 +1,31 @@
-import { Col, Row, Space } from "antd";
+import { Col, Row, Space, Typography } from "antd";
 import Image from "next/image";
 
 const features = [
   {
-    title: "Create Notes from Youtube Videos",
+    title: "An out of the box solution for your notes",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
-    img: "https://img.icons8.com/3d-fluency/750/null/youtube-play.png",
+    img: "/assets/illustrations/youtube.svg",
   },
   {
-    title: "AI Powered Notes/Blogs",
+    title: "Effortless Video-to-Notes Conversion",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
 
-    img: "https://img.icons8.com/3d-fluency/750/null/chatbot.png",
+    img: "/assets/illustrations/ai.svg",
   },
   {
-    title: "Unlimited Folders to Organize Notes",
+    title: "Unlimited Space to Organize Your Notes",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
-    img: "https://img.icons8.com/3d-fluency/750/null/opened-folder.png",
+    img: "/assets/illustrations/folder.svg",
   },
   {
-    title: "Completely Free Forever",
+    title: "Just in Price of a Cup of Coffee ",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
-    img: "https://img.icons8.com/3d-fluency/750/null/money.png",
+    img: "/assets/illustrations/price.svg",
   },
 ];
 
@@ -38,18 +38,18 @@ const Feature = ({ title, description, img, index }: any) => {
         alignItems: "center",
         justifyContent: "center",
       }}
-      //   gutter={0}
+      gutter={60}
     >
       <Col
-        span={10}
+        span={12}
         style={{
           display: "flex",
           justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
         }}
       >
-        <Image src={img} width={400} height={400} alt={""} />
+        <Image src={img} width={600} height={600} alt={""} />
       </Col>
-      <Col span={10} style={{ color: "#000000" }}>
+      <Col span={9} style={{ color: "#000000" }}>
         <h1>{title}</h1>
         <p>{description}</p>
       </Col>
@@ -60,6 +60,12 @@ const Feature = ({ title, description, img, index }: any) => {
 export default function Features() {
   return (
     <Space direction="vertical" size="large" style={{ width: "100%" }}>
+      <Space
+        size="large"
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      >
+        <Typography.Title level={1}>Features</Typography.Title>
+      </Space>
       {features.map((feature, index) => (
         <Feature
           key={feature.title}
