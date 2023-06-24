@@ -1,7 +1,23 @@
 import CreateNote from "@/components/Notes/createNote";
+import useSaveUserInfo from "@/hooks/authHooks/useSaveUserInfo";
+import Link from "next/link";
 
-const Notes = (props: any) => {
-  console.log(props, "Props");
+interface NotesProps {
+  isAuthorized: boolean;
+  username: string;
+}
+const Notes = (props: NotesProps) => {
+  const { isAuthorized, username } = props;
+  useSaveUserInfo({ isAuthorized, username });
+
+  if (!isAuthorized) {
+    return (
+      <div>
+        Not Authorized Please <Link href="/login">login again</Link>
+      </div>
+    );
+  }
+
   return (
     <div>
       <CreateNote />

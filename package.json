@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@editorjs/simple-image": "^1.5.1",
+    "@types/uuid": "^9.0.2",
     "@types/xml2js": "^0.4.11"
   }
 }

@@ -27,7 +27,7 @@ import { checkIfValidUrl, convertYoutubeLink } from "./utils";
 import { nanoid } from "nanoid";
 import { useQuery } from "@tanstack/react-query";
 import { query } from "firebase/firestore";
-import { getSubs } from "@/api/youtube/getSubs";
+import { getSubs } from "@/services/youtube/getSubs";
 import { promtLibrary } from "./helper";
 import { DownOutlined } from "@ant-design/icons";
 
@@ -148,16 +148,17 @@ const CreateNote = () => {
 
     try {
       // TODO: Fix below issue
-      if (!user) throw new Error("User is not logged in");
+      if (!user) throw new Error("User is not logged in"); //Get the user from the PageContext
+
       if (editorData === undefined) throw new Error("Editor data is empty");
-      if (transcribedData === undefined)
-        throw new Error("Transcribed data is empty");
+      // if (transcribedData === undefined)
+      //   throw new Error("Transcribed data is empty");
       saveNotes({
         id: nanoid(),
         title: editorData.blocks[0].data.text,
         url: url,
         content: editorData,
-        transcribedData: transcribedData,
+        transcribedData: transcribedData ? transcribedData : "",
         date: new Date(),
         userId: user.uid,
       })
