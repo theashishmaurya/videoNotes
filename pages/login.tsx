@@ -5,7 +5,15 @@ const LogIn = ({ appID }: { appID: string }) => {
     require("@passageidentity/passage-elements/passage-auth");
   }, []);
 
-  return <passage-auth app-id={appID}></passage-auth>;
+  return (
+    <div
+      style={{
+        height: "100%",
+      }}
+    >
+      <passage-auth app-id={appID}></passage-auth>
+    </div>
+  );
 };
 
 export async function getStaticProps() {

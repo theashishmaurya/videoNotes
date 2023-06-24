@@ -1,6 +1,7 @@
 import React from "react";
-import SingInWithGoogleButton from "../singin";
+import SingInWithGoogleButton from "../singin/signInwithFirebase";
 import heroStyle from "./Hero.module.css";
+import SingInWithPassage from "../singin/signInwithPassage";
 
 const Info = {
   title: "Convert YouTube Videos to Notes - Boost Your Productivity",
@@ -15,7 +16,7 @@ export default function HeroArea() {
       <h1 className={heroStyle["hero-title"]}>{Info.title}</h1>
       <p className={heroStyle["hero-description"]}>{Info.metaDesciption}</p>
       <div className={heroStyle["hero-buttons"]}>
-        <SingInWithGoogleButton title="Sign in with Google" icon={true} />
+        <SingInWithPassage title="Sign in with Passage" icon={true} />
       </div>
     </div>
   );

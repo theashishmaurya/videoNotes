@@ -8,6 +8,7 @@ import UnAuthenticatedLayout from "@/components/layout/UnAuthenticated.Layout";
 import { UserContext, UserProvider } from "@/context/userContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
+import { ConfigProvider } from "antd";
 
 const UnAuthenticatedRoutes = [
   "/login",
@@ -25,19 +26,35 @@ export default function App({ Component, pageProps }: AppProps) {
 
   if (UnAuthenticatedRoutes.includes(router.pathname)) {
     return (
-      <UnAuthenticatedLayout>
-        <Component {...pageProps} />;
-        <Analytics />
-      </UnAuthenticatedLayout>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#000000",
+          },
+        }}
+      >
+        <UnAuthenticatedLayout>
+          <Component {...pageProps} />;
+          <Analytics />
+        </UnAuthenticatedLayout>
+      </ConfigProvider>
     );
   }
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <Authenticatedlayout>
-          <Component {...pageProps} />
-          <Analytics />
-        </Authenticatedlayout>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#000000",
+            },
+          }}
+        >
+          <Authenticatedlayout>
+            <Component {...pageProps} />
+            <Analytics />
+          </Authenticatedlayout>
+        </ConfigProvider>
       </UserProvider>
     </QueryClientProvider>
   );

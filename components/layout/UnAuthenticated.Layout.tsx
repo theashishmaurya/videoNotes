@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
 import { Layout, Menu, theme } from "antd";
-import SingInWithGoogle from "../singin";
+import SingInWithGoogle from "../singin/signInwithFirebase";
 import Link from "next/link";
+import SingInWithPassage from "../singin/signInwithPassage";
 
 const { Header, Content, Footer } = Layout;
 
@@ -45,7 +46,7 @@ const UnAuthenticatedLayout: React.FC<UnAuthenticatedlayoutProps> = ({
             }, // Label can be a ReactNode as well <Link to="/about">About</Link>
           ]}
         />
-        <SingInWithGoogle title={"Get Started"} icon={false} />
+        <SingInWithPassage title={"Get Started"} icon={false} type="primary" />
       </Header>
       <Content style={{ padding: "0px" }}>
         <div style={{ background: colorBgContainer, padding: "20px" }}>
