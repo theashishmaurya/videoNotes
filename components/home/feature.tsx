@@ -5,13 +5,13 @@ const features = [
   {
     title: "An out of the box solution for your notes",
     description:
-      "Revolutionize your note-taking experience with VideoWizard, the cutting-edge SaaS tool that harnesses the prowess of artificial intelligence. Gone are the days of painstakingly transcribing video content—simply provide the YouTube video link, and let VideoWizard work its magic.",
-    img: "/assets/illustrations/youtube.svg",
+      "Revolutionize your note-taking experience with VideoNotes, the cutting-edge SaaS tool that harnesses the prowess of artificial intelligence. Gone are the days of painstakingly transcribing video content—simply provide the YouTube video link, and let VideoNotes work its magic.",
+    img: "/assets/illustrations/outofbox.svg",
   },
   {
     title: "Effortless Conversions",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
+      "With VideoNotesby your side, experience a streamlined workflow that optimizes your productivity. Effortlessly navigate through your notes, review essential concepts, and bolster your understanding—all in a fraction of the time it would traditionally take.",
 
     img: "/assets/illustrations/ai.svg",
   },
