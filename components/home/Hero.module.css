@@ -23,5 +23,6 @@
 .hero-buttons{
     display: flex;
     justify-content: center;
+    margin: 4rem;
     z-index: 1;
 }
