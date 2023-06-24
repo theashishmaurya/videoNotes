@@ -9,7 +9,7 @@ const features = [
     img: "/assets/illustrations/youtube.svg",
   },
   {
-    title: "Effortless Video-to-Notes Conversion",
+    title: "Effortless Conversions",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
 
@@ -22,7 +22,7 @@ const features = [
     img: "/assets/illustrations/folder.svg",
   },
   {
-    title: "Just in Price of a Cup of Coffee ",
+    title: "Just in Price of a Cup of Coffee ",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
     img: "/assets/illustrations/price.svg",
