@@ -160,7 +160,7 @@ const CreateNote = () => {
         content: editorData,
         transcribedData: transcribedData ? transcribedData : "",
         date: new Date(),
-        userId: user.uid,
+        userId: user, //enail of user used as UserID as it's unique
       })
         .then(() => {
           message.success("Note saved successfully");

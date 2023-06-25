@@ -11,7 +11,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const Passage = require("@passageidentity/passage-node");
   try {
     const authToken = req.cookies["psg_auth_token"];
     //TODO: Fix any

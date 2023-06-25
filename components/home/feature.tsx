@@ -11,20 +11,19 @@ const features = [
   {
     title: "Effortless Conversions",
     description:
-      "With VideoNotesby your side, experience a streamlined workflow that optimizes your productivity. Effortlessly navigate through your notes, review essential concepts, and bolster your understanding—all in a fraction of the time it would traditionally take.",
+      "With VideoNotesby your side, experience a streamlined workflow that optimizes your productivity. Effortlessly navigate through your notes, review essential concepts, and bolster your understanding—all in a fraction of the time it would traditionally take.",
 
     img: "/assets/illustrations/ai.svg",
   },
   {
     title: "Unlimited Space to Organize Your Notes",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
+      "There are no boundaries on your creativity. Capture and store an abundance of notes from YouTube videos without worrying about space constraints. Our cutting-edge platform offers you a digital canvas where your thoughts can expand, interconnect,and evolve.",
     img: "/assets/illustrations/folder.svg",
   },
   {
     title: "Just in Price of a Cup of Coffee ",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
+    description: "",
     img: "/assets/illustrations/price.svg",
   },
 ];
@@ -50,8 +49,8 @@ const Feature = ({ title, description, img, index }: any) => {
         <Image src={img} width={600} height={600} alt={""} />
       </Col>
       <Col span={9} style={{ color: "#000000" }}>
-        <h1>{title}</h1>
-        <p>{description}</p>
+        <Typography.Title level={2}>{title}</Typography.Title>
+        <Typography.Paragraph>{description}</Typography.Paragraph>
       </Col>
     </Row>
   );

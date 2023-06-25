@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, Typography, theme } from "antd";
 import SingInWithGoogle from "../singin/signInwithFirebase";
 import Link from "next/link";
 import SingInWithPassage from "../singin/signInwithPassage";
@@ -25,6 +25,7 @@ const UnAuthenticatedLayout: React.FC<UnAuthenticatedlayoutProps> = ({
           justifyContent: "space-between",
           alignItems: "center",
           background: "white",
+          width: "100%",
         }}
       >
         <div className="logo">
@@ -34,14 +35,31 @@ const UnAuthenticatedLayout: React.FC<UnAuthenticatedlayoutProps> = ({
         <Menu
           theme="light"
           mode="horizontal"
-          defaultSelectedKeys={["1"]}
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          // defaultSelectedKeys={["1"]}
           items={[
-            { key: "1", label: <Link href="/">Home</Link> },
-            { key: "2", label: <Link href="#features">Features</Link> },
+            {
+              key: "1",
+              label: (
+                <Link href="/">
+                  <Typography.Text>Home</Typography.Text>
+                </Link>
+              ),
+            },
+            {
+              key: "2",
+              label: (
+                <Link href="#features">
+                  <Typography.Text>Features</Typography.Text>
+                </Link>
+              ),
+            },
             {
               key: "3",
               label: (
-                <Link href="https://twitter.com/theysaymaurya">Contact Us</Link>
+                <Link href="https://twitter.com/theysaymaurya">
+                  <Typography.Text>Contact Us</Typography.Text>
+                </Link>
               ),
             }, // Label can be a ReactNode as well <Link to="/about">About</Link>
           ]}

@@ -35,9 +35,10 @@ export const NoteBookDataProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();
 
   useEffect(() => {
+    console.log("User", user);
     if (!user) return;
 
-    getNotes(user?.uid).then((data) => {
+    getNotes(user).then((data) => {
       console.log(data);
       setNoteBookData(data);
     });

@@ -1,3 +1,4 @@
+import { useUser } from "@/context/userContext";
 import { db } from "@/firebase/firebaseClient";
 import { message } from "antd";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -12,6 +13,7 @@ interface UserInfo {
 const useSaveUserInfo = (userInfo: UserInfo) => {
   const { isAuthorized, username } = userInfo;
   const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const { setUser } = useUser();
 
   if (!isAuthorized) {
     return;
@@ -33,8 +35,6 @@ const useSaveUserInfo = (userInfo: UserInfo) => {
           photoURL: "",
           emailVerified: "",
         });
-
-        setCurrentUser(username);
       }
 
       return {
@@ -55,7 +55,16 @@ const useSaveUserInfo = (userInfo: UserInfo) => {
     }
   };
 
-  return saveInfoToDb();
+  if (isAuthorized && !currentUser) {
+    setCurrentUser(username);
+    setUser(username);
+
+    saveInfoToDb();
+  }
+
+  return {
+    currentUser,
+  };
 };
 
 export default useSaveUserInfo;
