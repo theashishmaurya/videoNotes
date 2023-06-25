@@ -29,8 +29,10 @@ const Directory: React.FC = ({}) => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log("User", user);
     if (user) {
-      getDirectory(user.uid).then((data) => {
+      getDirectory(user).then((data) => {
+        console.log(data);
         setDirectoryData(data);
       });
     }
@@ -86,7 +88,7 @@ const Directory: React.FC = ({}) => {
           type === "folder" ? newFolder : newFile,
         ];
 
-        await updateDirectory(user.uid, newDirectoryData);
+        await updateDirectory(user, newDirectoryData);
         setDirectoryData([...directoryData]);
       } catch (error) {
         console.log(error);
@@ -108,7 +110,7 @@ const Directory: React.FC = ({}) => {
     try {
       if (!user) throw new Error("User not found");
 
-      await updateDirectory(user.uid, NewDirectoryData);
+      await updateDirectory(user, NewDirectoryData);
     } catch (error) {
       console.log(error);
     }

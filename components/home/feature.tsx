@@ -1,31 +1,30 @@
-import { Col, Row, Space } from "antd";
+import { Col, Row, Space, Typography } from "antd";
 import Image from "next/image";
 
 const features = [
   {
-    title: "Create Notes from Youtube Videos",
+    title: "An out of the box solution for your notes",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
-    img: "https://img.icons8.com/3d-fluency/750/null/youtube-play.png",
+      "Revolutionize your note-taking experience with VideoNotes, the cutting-edge SaaS tool that harnesses the prowess of artificial intelligence. Gone are the days of painstakingly transcribing video content—simply provide the YouTube video link, and let VideoNotes work its magic.",
+    img: "/assets/illustrations/outofbox.svg",
   },
   {
-    title: "AI Powered Notes/Blogs",
+    title: "Effortless Conversions",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
+      "With VideoNotesby your side, experience a streamlined workflow that optimizes your productivity. Effortlessly navigate through your notes, review essential concepts, and bolster your understanding—all in a fraction of the time it would traditionally take.",
 
-    img: "https://img.icons8.com/3d-fluency/750/null/chatbot.png",
+    img: "/assets/illustrations/ai.svg",
   },
   {
-    title: "Unlimited Folders to Organize Notes",
+    title: "Unlimited Space to Organize Your Notes",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
-    img: "https://img.icons8.com/3d-fluency/750/null/opened-folder.png",
+      "There are no boundaries on your creativity. Capture and store an abundance of notes from YouTube videos without worrying about space constraints. Our cutting-edge platform offers you a digital canvas where your thoughts can expand, interconnect,and evolve.",
+    img: "/assets/illustrations/folder.svg",
   },
   {
-    title: "Completely Free Forever",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, veniam laudantium ad nihil provident quisquam. Natus, facilis quaerat? Necessitatibus est voluptas velit ipsam porro iste, quis sapiente labore non deserunt!",
-    img: "https://img.icons8.com/3d-fluency/750/null/money.png",
+    title: "Just in Price of a Cup of Coffee ",
+    description: "",
+    img: "/assets/illustrations/price.svg",
   },
 ];
 
@@ -38,20 +37,20 @@ const Feature = ({ title, description, img, index }: any) => {
         alignItems: "center",
         justifyContent: "center",
       }}
-      //   gutter={0}
+      gutter={60}
     >
       <Col
-        span={10}
+        span={12}
         style={{
           display: "flex",
           justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
         }}
       >
-        <Image src={img} width={400} height={400} alt={""} />
+        <Image src={img} width={600} height={600} alt={""} />
       </Col>
-      <Col span={10} style={{ color: "#000000" }}>
-        <h1>{title}</h1>
-        <p>{description}</p>
+      <Col span={9} style={{ color: "#000000" }}>
+        <Typography.Title level={2}>{title}</Typography.Title>
+        <Typography.Paragraph>{description}</Typography.Paragraph>
       </Col>
     </Row>
   );
@@ -60,6 +59,12 @@ const Feature = ({ title, description, img, index }: any) => {
 export default function Features() {
   return (
     <Space direction="vertical" size="large" style={{ width: "100%" }}>
+      <Space
+        size="large"
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      >
+        <Typography.Title level={1}>Features</Typography.Title>
+      </Space>
       {features.map((feature, index) => (
         <Feature
           key={feature.title}

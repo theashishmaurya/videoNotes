@@ -1,7 +1,7 @@
 
 .hero-area{
     margin: 10%;
-    height: 90vh;
+    height: 80vh;
 }
 
 .hero-title {
@@ -23,5 +23,6 @@
 .hero-buttons{
     display: flex;
     justify-content: center;
+    margin: 4rem;
     z-index: 1;
 }

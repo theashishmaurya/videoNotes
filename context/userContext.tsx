@@ -14,31 +14,24 @@ import { DataNode } from "antd/es/tree";
 import { getDirectory } from "@/firebase/db/notes";
 
 interface UserContext {
-  user: User | null;
+  user: string | null;
   directoryData: DataNode[];
+  setUser: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const UserContext = createContext<UserContext>({
   user: null,
   directoryData: [],
+  setUser: () => ({}),
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<string | null>(null);
   const [directoryData, setDirectoryData] = useState<DataNode[]>([]);
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    });
-  }, []);
 
   const value = {
     user,
+    setUser,
     directoryData,
   };
 
