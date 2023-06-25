@@ -30,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
         theme={{
           token: {
             colorPrimary: "#000000",
+
             fontFamily: "Poppins" /* "Poppins" */,
           },
         }}

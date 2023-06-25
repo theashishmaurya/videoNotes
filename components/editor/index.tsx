@@ -6,14 +6,7 @@ import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
 import Quote from "@editorjs/quote";
 import Image from "@editorjs/image";
-import React, {
-  forwardRef,
-  MutableRefObject,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from "react";
-import dynamic from "next/dynamic";
+import React, { forwardRef, MutableRefObject, useEffect } from "react";
 
 interface EditorProps {
   data?: OutputData;
@@ -73,7 +66,12 @@ const Editor = forwardRef((props: EditorProps, ref) => {
 
   return (
     <div>
-      <div id="editorjs"></div>
+      <div
+        id="editorjs"
+        style={{
+          minWidth: "100%",
+        }}
+      ></div>
     </div>
   );
 });

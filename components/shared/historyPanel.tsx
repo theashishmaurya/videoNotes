@@ -1,32 +1,37 @@
 import { useNoteBookData } from "@/context/noteBookContext";
-import { Space } from "antd";
+import { Menu, Space } from "antd";
 
-const HistoryPanel = () => {
+interface HistoryPanelProps {
+  handleClose: () => void;
+}
+
+const HistoryPanel = (props: HistoryPanelProps) => {
   const { notebookData, setCurrentNoteData } = useNoteBookData();
+  const { handleClose } = props;
+
+  const items2 = notebookData.map((data, index) => {
+    return {
+      key: data.id || index,
+      label: data.title || "Untitled",
+    };
+  });
 
   return (
-    <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-      {notebookData.map((data, index) => {
-        return (
-          <div
-            onClick={() => {
-              console.log("Clicked");
-              setCurrentNoteData(data);
-            }}
-            key={data.id || index}
-            style={{
-              width: "100%",
-              height: "100%",
-              padding: "1rem",
-              margin: "1px",
-              boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-            }}
-          >
-            {data.title || "Untitled"}
-          </div>
+    <Menu
+      mode="inline"
+      defaultSelectedKeys={["1"]}
+      style={{
+        height: "100%",
+        borderRight: 0,
+      }}
+      onClick={(data) => {
+        setCurrentNoteData(
+          notebookData.find((note) => note.id === data.key) || notebookData[0]
         );
-      })}
-    </Space>
+        handleClose();
+      }}
+      items={items2}
+    />
   );
 };
 

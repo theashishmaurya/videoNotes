@@ -4,6 +4,7 @@ import { Input, InputRef, MenuProps, Modal } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import style from "./authenticated.module.css";
 
 const { Header, Content, Sider } = Layout;
 
@@ -89,7 +90,13 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
           <Menu
             mode="inline"
             defaultSelectedKeys={["1"]}
-            style={{ height: "100%", borderRight: 0 }}
+            style={{
+              height: "100%",
+              borderRight: 0,
+              background: colorBgContainer,
+            }}
+            //on Select change the color of the selected item
+
             onClick={({ key }) => router.push(`/${key}`)}
             items={items2}
           />
