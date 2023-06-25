@@ -1,6 +1,10 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { LaptopOutlined, UserOutlined } from "@ant-design/icons";
-import { Input, InputRef, MenuProps, Modal } from "antd";
+import {
+  CommentOutlined,
+  LaptopOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { FloatButton, Input, InputRef, MenuProps, Modal } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -75,12 +79,6 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
       </Modal>
       <Header className="header">
         <div className="logo" />
-        {/* <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items1}
-        /> */}
       </Header>
       <Layout>
         <Sider
@@ -108,13 +106,19 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
           </Breadcrumb>
           <Content
             style={{
-              padding: 24,
-              margin: 0,
+              padding: "2rem",
+              margin: "0 2rem",
               minHeight: 280,
+
               background: colorBgContainer,
             }}
           >
             {children}
+            <FloatButton
+              type="primary"
+              onClick={() => router.push("https://twitter.com/theysaymaurya")}
+              icon={<CommentOutlined />}
+            />
           </Content>
         </Layout>
       </Layout>
