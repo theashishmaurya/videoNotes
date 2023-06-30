@@ -1,6 +1,6 @@
 # Video-Notes
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/example/video-notes/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/theashishmaurya/videoNotes/blob/main/LICENCE)
 
 Video-Notes is a SaaS tool that automatically generates notes from informational videos. It utilizes advanced technologies such as automatic transcription, language translation, and natural language processing to provide users with concise summaries, transcripts, and even blog posts based on the video content.
 
@@ -36,13 +36,13 @@ Contributions are welcome! If you have any ideas, bug fixes, or improvements, pl
 
 ## License
 
-Video-Notes is open source and released under the [MIT License](https://github.com/example/video-notes/blob/main/LICENSE).
+Video-Notes is open source and released under the [MIT License](https://github.com/theashishmaurya/videoNotes/blob/main/LICENCE).
 
 ## Live Version
 
 Check out the live version of Video-Notes at [https://video-notes-pi.vercel.app](https://video-notes-pi.vercel.app).
 
-For detailed usage instructions and examples, please refer to the [Blog](blog).
+For detailed usage instructions and examples, please refer to the [Blog](https://blog.theashishmaurya.me/introducing-videonotes-your-ultimate-ai-powered-youtube-to-notes-companion).
 
 ## Contact
 
