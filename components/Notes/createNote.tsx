@@ -236,15 +236,6 @@ const CreateNote = () => {
                 >
                   Convert to {selectedPromt}
                 </Dropdown.Button>
-
-                {/* <Button
-                  type="primary"
-                  onClick={() => {
-                    // AddBlocks(convertToBlock(data));
-                  }}
-                >
-                  Convert
-                </Button> */}
               </>
             )}
           </Space>
@@ -256,27 +247,33 @@ const CreateNote = () => {
           />
         </Col>
         <Col span={12}>
-          <Button
-            type="primary"
-            style={{}}
-            onClick={() =>
-              EditorRef.current?.save().then((data) => {
-                // TODO: Make API call to save the data
-                console.log("Save button clicked");
+          <Editor
+            data={editorData}
+            onChange={setEditorData}
+            editorRef={EditorRef}
+          />
 
-                handleSaveToNotes();
-                console.log(editorData);
-              })
-            }
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
           >
-            Save
-          </Button>
-          <div>
-            <Editor
-              data={editorData}
-              onChange={setEditorData}
-              editorRef={EditorRef}
-            />
+            <Button
+              type="primary"
+              style={{}}
+              onClick={() =>
+                EditorRef.current?.save().then((data) => {
+                  // TODO: Make API call to save the data
+                  console.log("Save button clicked");
+
+                  handleSaveToNotes();
+                  console.log(editorData);
+                })
+              }
+            >
+              Save
+            </Button>
           </div>
         </Col>
       </Row>

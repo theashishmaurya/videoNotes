@@ -1,5 +1,6 @@
 import { Col, Row, Space, Typography } from "antd";
 import Image from "next/image";
+import SingInWithPassage from "../singin/signInwithPassage";
 
 const features = [
   {
@@ -23,7 +24,7 @@ const features = [
   },
   {
     title: "Just in Price of a Cup of Coffee ",
-    description: "",
+    description: "Coming Soon....",
     img: "/assets/illustrations/price.svg",
   },
 ];
@@ -74,6 +75,26 @@ export default function Features() {
           img={feature.img}
         />
       ))}
+
+      <Space
+        size="large"
+        direction="vertical"
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
+        <Typography.Title level={1}>What Are You Waiting For?</Typography.Title>
+        <SingInWithPassage
+          title="Get Started Now"
+          icon={false}
+          type="primary"
+        />
+      </Space>
     </Space>
   );
 }

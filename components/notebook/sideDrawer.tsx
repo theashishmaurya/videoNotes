@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { Button, Drawer, theme } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
+import HistoryPanel from "../shared/historyPanel";
 
 interface SideDrawerProps {
   children: React.ReactNode;
 }
 
 const SideDrawer: React.FC<SideDrawerProps> = ({ children }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const { token } = theme.useToken();
   const ref = React.useRef<HTMLDivElement>(null);
-
-  const childrens = React.Children.toArray(children);
 
   const showDrawer = () => {
     setOpen(true);
@@ -42,7 +41,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ children }) => {
         getContainer={false}
         width={250}
       >
-        {childrens[0]}
+        <HistoryPanel handleClose={onClose} />
       </Drawer>
       <div
         style={{
@@ -55,7 +54,7 @@ const SideDrawer: React.FC<SideDrawerProps> = ({ children }) => {
           alignItems: "center",
         }}
       >
-        {childrens.slice(1)}
+        {children}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Layout, Menu, Typography, theme } from "antd";
+import { Layout, Menu, Space, Typography, theme } from "antd";
 import SingInWithGoogle from "../singin/signInwithFirebase";
 import Link from "next/link";
 import SingInWithPassage from "../singin/signInwithPassage";
@@ -71,8 +71,25 @@ const UnAuthenticatedLayout: React.FC<UnAuthenticatedlayoutProps> = ({
           {children}
         </div>
       </Content>
-      <Footer style={{ textAlign: "center" }}>
-        Ant Design ©2023 Created by Ant UED
+      <Footer style={{ textAlign: "center", background: colorBgContainer }}>
+        <Space direction="vertical">
+          <div>
+            <Link href="https://twitter.com/theysaymaurya"> Twitter </Link>|
+            <Link
+              href="
+           https://github.com/theashishmaurya"
+            >
+              {" "}
+              Github{" "}
+            </Link>
+          </div>
+          <div>
+            All Rights Reserved © 2023 Created by{" "}
+            <Link href={"https://twitter.com/theysaymaurya"}>
+              Ashish Maurya
+            </Link>
+          </div>
+        </Space>
       </Footer>
     </Layout>
   );
