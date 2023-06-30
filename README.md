@@ -1,38 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Video-Notes
 
-## Getting Started
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/example/video-notes/blob/main/LICENSE)
 
-First, run the development server:
+Video-Notes is a SaaS tool that automatically generates notes from informational videos. It utilizes advanced technologies such as automatic transcription, language translation, and natural language processing to provide users with concise summaries, transcripts, and even blog posts based on the video content.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Automatic transcription of video content
+- Language translation for transcripts
+- Summarization of video content
+- Generation of blog posts from video content
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Technical Implementation
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Video-Notes is built using the following technologies and frameworks:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Authentication: Passage
+- Fetching audio from YouTube: YTDL
+- Transcription: YouTube's auto-cc (previously Whisper API)
+- Language model: ChatGPT (GPT-3.5 architecture)
+- Data storage: Firebase
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Installation
 
-## Learn More
+To run Video-Notes locally, follow these steps:
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repository: `git clone https://github.com/theashishmaurya/videoNotes.git`
+2. Install the required dependencies: `yarn`
+3. Set up authentication using Passage. Refer to the documentation for more details.
+4. Configure Firebase for data storage. Refer to the documentation for detailed instructions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Contributions are welcome! If you have any ideas, bug fixes, or improvements, please submit a pull request. Make sure to follow the repository's code of conduct.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Video-Notes is open source and released under the [MIT License](https://github.com/example/video-notes/blob/main/LICENSE).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Live Version
+
+Check out the live version of Video-Notes at [https://video-notes-pi.vercel.app](https://video-notes-pi.vercel.app).
+
+For detailed usage instructions and examples, please refer to the [Blog](blog).
+
+## Contact
+
+If you have any questions, suggestions, or feedback, feel free to contact the development team at [ashish.1999vns@gmail.com](mailto:ashish.1999vns@gmail.com).
