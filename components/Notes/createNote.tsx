@@ -2,7 +2,7 @@ import { convertToBlock } from "@/components/editor/utils";
 import VideoPlayer from "@/components/VideoPlayer/videoPlayer";
 import { useUser } from "@/context/userContext";
 import { saveNotes } from "@/firebase/db/notes";
-import { getGptResponse } from "@/utils/openAiApi/chatGpt";
+import { getGptResponse, fetchChatCompletion } from "@/utils/openAiApi/chatGpt";
 import {
   getAudioFromUrl,
   transcribeAudio,
@@ -83,15 +83,16 @@ const CreateNote = () => {
       setCurrentStep(1);
 
       if (!data) return alert("No data found");
-      const markdown = await getGptResponse(
+      const markdown = await fetchChatCompletion(
         data.simpleText,
-        promtLibrary[selectedPromt].prompt
+        promtLibrary[selectedPromt].prompt,
       );
+      console.log(JSON.parse(markdown).response, "markdown here");
       setCurrentStep(2);
-      setMarkDownData(markdown);
-      if (markdown) {
+      setMarkDownData(JSON.parse(markdown).response);
+      if (JSON.parse(markdown).response) {
         console.log("Adding markdown block");
-        AddBlocks(convertToBlock(markdown));
+        AddBlocks(convertToBlock(JSON.parse(markdown).response));
       }
     } catch (error) {
       console.log(error);
@@ -170,7 +171,9 @@ const CreateNote = () => {
         });
     } catch (error) {
       message.error(
-        error && error instanceof Error ? error.message : "Something went wrong"
+        error && error instanceof Error
+          ? error.message
+          : "Something went wrong",
       );
     }
   };

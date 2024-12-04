@@ -4,7 +4,6 @@ import ytdl from "ytdl-core";
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { url } = req.query;
-  console.log(url);
 
   if (typeof url !== "string") {
     res.status(400).send("URL is not a string");

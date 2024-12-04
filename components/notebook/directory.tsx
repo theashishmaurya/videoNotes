@@ -29,7 +29,6 @@ const Directory: React.FC = ({}) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("User", user);
     if (user) {
       getDirectory(user).then((data) => {
         console.log(data);

@@ -43,40 +43,14 @@ const Authenticatedlayout: React.FC<AuthenticatedlayoutProps> = ({
 
   const [open, setOpen] = useState(false);
   const [ApiKey, setApiKey] = useState("");
-
-  useEffect(() => {
-    //Check local Storage
-
-    let key = localStorage.getItem("OpenAPIKey");
-    if (key === null) {
-      setOpen(true);
-    }
-  }, []);
-
   // use Location hook to get the current path and set the selected key accordingly
   const router = useRouter();
 
   const { pathname } = router;
 
-  const handleOk = () => {
-    localStorage.setItem("OpenAPIKey", ApiKey);
-    setApiKey("");
-    setOpen(false);
-  };
 
   return (
     <Layout>
-      <Modal title="Your OpenAI API key here" open={open} onOk={handleOk}>
-        <Input
-          placeholder="Your API Key Here"
-          onChange={(e) => {
-            setApiKey(e.target.value);
-          }}
-        />
-        <Link href="https://platform.openai.com/docs/developer-quickstart/your-api-keys">
-          Here is how to get your API key?
-        </Link>
-      </Modal>
       <Header className="header">
         <div className="logo" />
       </Header>

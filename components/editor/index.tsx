@@ -70,6 +70,7 @@ const Editor = forwardRef((props: EditorProps, ref) => {
         id="editorjs"
         style={{
           minWidth: "100%",
+          color:"#000"
         }}
       ></div>
     </div>
