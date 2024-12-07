@@ -33,7 +33,7 @@ const SingInWithPassage: React.FC<SingInWithPassageButtonProps> = (props) => {
 
   return (
     <Button
-      type={type ? type : "default"}
+      type="default"
       onClick={navigateToPassage}
       size="large"
       style={{

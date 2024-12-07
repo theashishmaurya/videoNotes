@@ -126,17 +126,17 @@ const Directory: React.FC = ({}) => {
         }}
       >
         <Button
-          type="ghost"
+          ghost={true}
           icon={<FolderAddFilled />}
           onClick={() => addNewNode("folder")}
         />
         <Button
-          type="ghost"
+          ghost={true}
           onClick={() => addNewNode("file")}
           icon={<FileAddFilled />}
         />
         <Button
-          type="ghost"
+          ghost={true}
           onClick={onDelete}
           icon={<DeleteFilled color="red" />}
         />
