@@ -1,6 +1,7 @@
 // pages/api/chat-completion.js
 
 import { NextApiRequest, NextApiResponse } from "next";
+import { env } from "process";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -18,10 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const myHeaders = new Headers();
-  myHeaders.append(
-    "Authorization",
-    "Bearer 4mXA70_RMX_xHR-T-QmFsWPqAJxSLbNxHcrmCER8c3ckv7tQMsj85VTzfDK0mlutS9yEYdLeRZUlNm8gIk1uow",
-  );
+  myHeaders.append("Authorization", `Bearer ${process.env.OLLAMA_API_KEY}`);
   myHeaders.append("Content-Type", "application/json");
 
   const raw = JSON.stringify({

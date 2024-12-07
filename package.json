@@ -37,7 +37,7 @@
     "react-redux": "^8.0.5",
     "typescript": "4.9.5",
     "xml2js": "^0.6.0",
-    "ytdl-core": "4.9.1"
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "@editorjs/simple-image": "^1.5.1",
