@@ -1,4 +1,4 @@
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 import { NextApiRequest, NextApiResponse } from "next";
 import { parseString } from "xml2js";
 

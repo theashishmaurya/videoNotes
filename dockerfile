@@ -1,5 +1,4 @@
-# syntax=docker.io/docker/dockerfile:1
-
+# syntax=docker/dockerfile:1
 FROM node:18-alpine AS base
 
 # Install dependencies only when needed
@@ -17,9 +16,8 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-
 # Rebuild the source code only when needed
-FROM base AS builder
+FROM  base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

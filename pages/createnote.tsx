@@ -1,3 +1,4 @@
+import React from "react"
 import CreateNote from "@/components/Notes/createNote";
 import useSaveUserInfo from "@/hooks/authHooks/useSaveUserInfo";
 import Link from "next/link";
@@ -8,15 +9,16 @@ interface NotesProps {
 }
 const Notes = (props: NotesProps) => {
   const { isAuthorized, username } = props;
-  useSaveUserInfo({ isAuthorized, username });
+  console.log(props,"Props from server")
+  // useSaveUserInfo({ isAuthorized, username });
 
-  if (!isAuthorized) {
-    return (
-      <div>
-        Not Authorized Please <Link href="/login">login again</Link>
-      </div>
-    );
-  }
+  // if (!isAuthorized) {
+  //   return (
+  //     <div>
+  //       Not Authorized Please <Link href="/login">login again</Link>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
@@ -28,6 +30,7 @@ const Notes = (props: NotesProps) => {
 export const getServerSideProps = async (context: any) => {
   // getServerSideProps runs server-side only and will never execute on the client browser
 
+  console.log("Server is getting logged",context)
   // this allows the safe use of a private Passage API Key
   const Passage = require("@passageidentity/passage-node").Passage;
 
@@ -39,6 +42,7 @@ export const getServerSideProps = async (context: any) => {
 
   try {
     const authToken = context.req.cookies["psg_auth_token"];
+    console.log(authToken,"Auth token from the 1Pass")
 
     const req = {
       headers: {

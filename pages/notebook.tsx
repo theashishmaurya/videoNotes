@@ -34,7 +34,7 @@ export const getServerSideProps = async (context: any) => {
   // getServerSideProps runs server-side only and will never execute on the client browser
 
   // this allows the safe use of a private Passage API Key
-  const Passage = require("@passageidentity/passage-node");
+  const Passage = require("@passageidentity/passage-node").Passage;
 
   const passage = new Passage({
     appID: process.env.PASSAGE_APP_ID as string,

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@distube/ytdl-core": "^4.15.1",
     "@editorjs/code": "^2.8.0",
     "@editorjs/editorjs": "^2.26.5",
     "@editorjs/header": "^2.7.0",
