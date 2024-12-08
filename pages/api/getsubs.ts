@@ -187,7 +187,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 const agentOptions = {
   pipelining: 5,
   maxRedirections: 0,
-  localAddress: "127.0.0.1",
 };
 
 // agent should be created once if you don't want to change your cookie
