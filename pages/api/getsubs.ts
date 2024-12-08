@@ -187,6 +187,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 const agentOptions = {
   pipelining: 5,
   maxRedirections: 0,
+  quiet: true,  
+  skip_download: true,
 };
 
 // agent should be created once if you don't want to change your cookie
